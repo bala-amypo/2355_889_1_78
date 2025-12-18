@@ -12,7 +12,7 @@ public class VolunteerSkillController {
 
     @PostMapping
     @Operation(summary = "Add or update skill")
-    public VolunteerSkill addOrUpdateSkill(@RequestBody VolunteerSkill skill) {
+    public VolunteerSkill addOrUpdateSkill(@RequestBody VolunteerSkillRecord skill) {
         return skill;
     }
 
