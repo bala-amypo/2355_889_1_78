@@ -34,9 +34,9 @@ public class VolunteerSkillRecord {
                                 String skillLevel, Boolean certified) {
         this.volunteerId = volunteerId;
         this.skillName = skillName;
-        private String BEGINNER;
-    private String INTERMEDIATE;
-    private String EXPERT;
+       this.BEGINNER = BEGINNER;
+       this.INTERMEDIATE=INTERMEDIATE;
+        this.EXPERT=EXPERT;
         this.certified = certified;
     }
 
