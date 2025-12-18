@@ -14,7 +14,7 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .servers(List.of(
-                        new Server().url("http://localhost:8080") // change your URL
+                        new Server().url("https://9240.pro604cr.amypo.ai/") // change your URL
                 ));
     }
 }
