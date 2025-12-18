@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.TaskAssignment;
+import com.example.demo.model.TaskAssignmentRecord;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 

@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.VolunteerSkill;
+import com.example.demo.model.VolunteerSkillRecord;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 
