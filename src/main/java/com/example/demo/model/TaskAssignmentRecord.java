@@ -16,9 +16,9 @@ public class TaskAssignmentRecord {
 
     private LocalDateTime assignedAt;
 
-    // ACTIVE / COMPLETED / CANCELLED
-    private String status;
-
+    private String ACTIVE;
+     private String COMPLETED;
+     private String CANCELLED;
     private String notes;
 
     @PrePersist
