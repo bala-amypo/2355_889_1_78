@@ -1,10 +1,9 @@
 package com.example.demo.model;
 
-import java.time.*;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "assignment_evaluation_record")
 public class AssignmentEvaluationRecord {
 
     @Id
@@ -12,32 +11,38 @@ public class AssignmentEvaluationRecord {
     private Long id;
 
     private Long assignmentId;
-
-    private Integer rating; // 1–5
-
+    private int rating;
     private String feedback;
-
     private LocalDateTime evaluatedAt;
-
-    @PrePersist
-    public void setEvaluatedAt() {
-        this.evaluatedAt = LocalDateTime.now();
-    }
 
     public AssignmentEvaluationRecord() {}
 
-    public AssignmentEvaluationRecord(Long assignmentId, Integer rating, String feedback) {
+    public AssignmentEvaluationRecord(Long id, Long assignmentId,
+            int rating, String feedback, LocalDateTime evaluatedAt) {
+        this.id = id;
         this.assignmentId = assignmentId;
         this.rating = rating;
         this.feedback = feedback;
+        this.evaluatedAt = evaluatedAt;
     }
 
-    // getters & setters
+    @PrePersist
+    void pre() { this.evaluatedAt = LocalDateTime.now(); }
+
     public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
     public Long getAssignmentId() { return assignmentId; }
     public void setAssignmentId(Long assignmentId) { this.assignmentId = assignmentId; }
-    public Integer getRating() { return rating; }
-    public void setRating(Integer rating) { this.rating = rating; }
+
+    public int getRating() { return rating; }
+    public void setRating(int rating) { this.rating = rating; }
+
     public String getFeedback() { return feedback; }
     public void setFeedback(String feedback) { this.feedback = feedback; }
+
+    public LocalDateTime getEvaluatedAt() { return evaluatedAt; }
+    public void setEvaluatedAt(LocalDateTime evaluatedAt) {
+        this.evaluatedAt = evaluatedAt;
+    }
 }
