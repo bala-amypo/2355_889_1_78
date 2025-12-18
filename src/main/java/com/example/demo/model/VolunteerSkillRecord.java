@@ -52,3 +52,47 @@ public class VolunteerSkillRecord {
     public void setCertified(Boolean certified) { this.certified = certified; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
 }
+public class SkillLevel {
+
+    private String BEGINNER;
+    private String INTERMEDIATE;
+    private String EXPERT;
+
+    // Non-parameterized constructor
+    public SkillLevel() {
+    }
+
+    // Parameterized constructor
+    public SkillLevel(String BEGINNER, String INTERMEDIATE, String EXPERT) {
+        this.BEGINNER = BEGINNER;
+        this.INTERMEDIATE = INTERMEDIATE;
+        this.EXPERT = EXPERT;
+    }
+
+    // Getter & Setter for BEGINNER
+    public String getBEGINNER() {
+        return BEGINNER;
+    }
+
+    public void setBEGINNER(String BEGINNER) {
+        this.BEGINNER = BEGINNER;
+    }
+
+    // Getter & Setter for INTERMEDIATE
+    public String getINTERMEDIATE() {
+        return INTERMEDIATE;
+    }
+
+    public void setINTERMEDIATE(String INTERMEDIATE) {
+        this.INTERMEDIATE = INTERMEDIATE;
+    }
+
+    // Getter & Setter for EXPERT
+    public String getEXPERT() {
+        return EXPERT;
+    }
+
+    public void setEXPERT(String EXPERT) {
+        this.EXPERT = EXPERT;
+    }
+}
