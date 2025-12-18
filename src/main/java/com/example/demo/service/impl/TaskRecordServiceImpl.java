@@ -23,10 +23,13 @@ public class TaskRecordServiceImpl implements TaskRecordService {
     public TaskRecord updateTask(Long id, TaskRecord updatedTask) {
         TaskRecord task = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
-        task.setTitle(updatedTask.getTitle());
-        task.setDescription(updatedTask.getDescription());
+        task.setTaskName(updatedTask.getTaskName());
+        task.setRequiredSkill(updatedTask.getRequiredSkill());
+        task.setRequiredSkillLevel(updatedTask.getRequiredSkillLevel());
+        task.setPriority(updatedTask.getPriority());
+        task.setTaskCode(updatedTask.getTaskCode());
         task.setStatus(updatedTask.getStatus());
-        task.setCode(updatedTask.getCode());
+
         return repository.save(task);
     }
 
