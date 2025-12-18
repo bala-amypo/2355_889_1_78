@@ -3,7 +3,8 @@ package com.example.demo.model;
 import java.time.*;
 import jakarta.persistence.*;
 public class VolunteerProfile {
-
+@Entity
+@Table anme=("Volunteer")
     @Id
     private Long id;
 

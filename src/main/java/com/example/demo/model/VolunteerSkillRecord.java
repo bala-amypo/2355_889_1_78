@@ -2,90 +2,51 @@ package com.example.demo.model;
 
 import java.time.*;
 import jakarta.persistence.*;
+
+@Entity
+@Table(name = "volunteer_skill_record")
 public class VolunteerSkillRecord {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String taskCode;
-    private String taskName;
+    private Long volunteerId;
 
-    private String requiredSkill;
+    private String skillName;
 
-    private String ;
-    private String AVAILABLE;
-    private String BUSY;
-    private String INACTIVE;
+    // BEGINNER / INTERMEDIATE / EXPERT
+    private String skillLevel;
 
-    private LocalDateTime createdAt;
-    public VolunteerProfile() {
+    private Boolean certified;
+
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    @PreUpdate
+    public void setUpdatedAt() {
+        this.updatedAt = LocalDateTime.now();
     }
-    public VolunteerProfile(Long id, String volunteerId, String fullName,
-                            String email, String phone,
-                            String AVAILABLE, String BUSY,
-                            String INACTIVE, LocalDateTime createdAt) {
-        this.id = id;
+
+    public VolunteerSkillRecord() {}
+
+    public VolunteerSkillRecord(Long volunteerId, String skillName,
+                                String skillLevel, Boolean certified) {
         this.volunteerId = volunteerId;
-        this.fullName = fullName;
-        this.email = email;
-        this.phone = phone;
-        this.AVAILABLE = AVAILABLE;
-        this.BUSY = BUSY;
-        this.INACTIVE = INACTIVE;
-        this.createdAt = createdAt;
+        this.skillName = skillName;
+        this.skillLevel = skillLevel;
+        this.certified = certified;
     }
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getVolunteerId() {
-        return volunteerId;
-    }
-    public void setVolunteerId(String volunteerId) {
-        this.volunteerId = volunteerId;
-    }
-    public String getFullName() {
-        return fullName;
-    }
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public String getPhone() {
-        return phone;
-    }
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-    public String getAVAILABLE() {
-        return AVAILABLE;
-    }
-    public void setAVAILABLE(String AVAILABLE) {
-        this.AVAILABLE = AVAILABLE;
-    }
-    public String getBUSY() {
-        return BUSY;
-    }
-    public void setBUSY(String BUSY) {
-        this.BUSY = BUSY;
-    }
-    public String getINACTIVE() {
-        return INACTIVE;
-    }
-    public void setINACTIVE(String INACTIVE) {
-        this.INACTIVE = INACTIVE;
-    }
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+
+    // getters & setters
+    public Long getId() { return id; }
+    public Long getVolunteerId() { return volunteerId; }
+    public void setVolunteerId(Long volunteerId) { this.volunteerId = volunteerId; }
+    public String getSkillName() { return skillName; }
+    public void setSkillName(String skillName) { this.skillName = skillName; }
+    public String getSkillLevel() { return skillLevel; }
+    public void setSkillLevel(String skillLevel) { this.skillLevel = skillLevel; }
+    public Boolean getCertified() { return certified; }
+    public void setCertified(Boolean certified) { this.certified = certified; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
 }
