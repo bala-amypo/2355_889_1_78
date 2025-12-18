@@ -12,7 +12,7 @@ public class AssignmentEvaluationController {
 
     @PostMapping
     @Operation(summary = "Submit evaluation")
-    public AssignmentEvaluation submitEvaluation(@RequestBody AssignmentEvaluation evaluation) {
+    public AssignmentEvaluation submitEvaluation(@RequestBody AssignmentEvaluationRecord evaluation) {
         return evaluation;
     }
 
