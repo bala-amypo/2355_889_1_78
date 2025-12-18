@@ -16,10 +16,10 @@ public class VolunteerSkillRecord {
     private String skillName;
 
     // BEGINNER / INTERMEDIATE / EXPERT
-    private String skillLevel;
-
+    private String BEGINNER;
+    private String INTERMEDIATE;
+    private String EXPERT;
     private Boolean certified;
-
     private LocalDateTime updatedAt;
 
     @PrePersist
@@ -34,7 +34,9 @@ public class VolunteerSkillRecord {
                                 String skillLevel, Boolean certified) {
         this.volunteerId = volunteerId;
         this.skillName = skillName;
-        this.skillLevel = skillLevel;
+        private String BEGINNER;
+    private String INTERMEDIATE;
+    private String EXPERT;
         this.certified = certified;
     }
 
