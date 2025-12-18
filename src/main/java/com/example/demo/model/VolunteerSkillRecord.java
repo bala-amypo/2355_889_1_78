@@ -12,10 +12,7 @@ public class VolunteerSkillRecord {
     private Long id;
 
     private Long volunteerId;
-
     private String skillName;
-
-    // BEGINNER / INTERMEDIATE / EXPERT
     private String BEGINNER;
     private String INTERMEDIATE;
     private String EXPERT;
@@ -31,46 +28,21 @@ public class VolunteerSkillRecord {
     public VolunteerSkillRecord() {}
 
     public VolunteerSkillRecord(Long volunteerId, String skillName,
-                                String skillLevel, Boolean certified) {
+                                String skillLevel, Boolean certified,String BEGINNER, String INTERMEDIATE, String EXPERT) {
         this.volunteerId = volunteerId;
         this.skillName = skillName;
-       this.BEGINNER = BEGINNER;
-       this.INTERMEDIATE=INTERMEDIATE;
-        this.EXPERT=EXPERT;
+        this.BEGINNER = BEGINNER;
+        this.INTERMEDIATE = INTERMEDIATE;
+        this.EXPERT = EXPERT;
         this.certified = certified;
     }
 
-    // getters & setters
     public Long getId() { return id; }
     public Long getVolunteerId() { return volunteerId; }
     public void setVolunteerId(Long volunteerId) { this.volunteerId = volunteerId; }
     public String getSkillName() { return skillName; }
     public void setSkillName(String skillName) { this.skillName = skillName; }
-    public String getSkillLevel() { return skillLevel; }
-    public void setSkillLevel(String skillLevel) { this.skillLevel = skillLevel; }
-    public Boolean getCertified() { return certified; }
-    public void setCertified(Boolean certified) { this.certified = certified; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-}
-public class SkillLevel {
-
-    private String BEGINNER;
-    private String INTERMEDIATE;
-    private String EXPERT;
-
-    // Non-parameterized constructor
-    public SkillLevel() {
-    }
-
-    // Parameterized constructor
-    public SkillLevel(String BEGINNER, String INTERMEDIATE, String EXPERT) {
-        this.BEGINNER = BEGINNER;
-        this.INTERMEDIATE = INTERMEDIATE;
-        this.EXPERT = EXPERT;
-    }
-
-    // Getter & Setter for BEGINNER
-    public String getBEGINNER() {
+        public String getBEGINNER() {
         return BEGINNER;
     }
 
@@ -95,4 +67,9 @@ public class SkillLevel {
     public void setEXPERT(String EXPERT) {
         this.EXPERT = EXPERT;
     }
+}
+
+    public Boolean getCertified() { return certified; }
+    public void setCertified(Boolean certified) { this.certified = certified; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
 }
