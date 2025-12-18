@@ -1,4 +1,4 @@
-package com.example.demo.entity;
-public class TaskAssignment{
+package com.example.demo.model;
+public class TaskAssignmentRecord{
     
 }
