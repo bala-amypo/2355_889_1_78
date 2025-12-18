@@ -1,11 +1,72 @@
-package com.example.demo.repository;
+package com.example.demo.service;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.demo.model.AssignmentEvaluationRecord;
+import java.util.List;
 
-public interface AssignmentEvaluationRecordRepository
-        extends JpaRepository<AssignmentEvaluationRecord, Long> {
-
-    AssignmentEvaluationRecord findByAssignmentId(Long assignmentId);
+public interface AssignmentEvaluationService {
+    AssignmentEvaluationRecord evaluateAssignment(AssignmentEvaluationRecord evaluation);
+    List<AssignmentEvaluationRecord> getEvaluationsByAssignment(Long assignmentId);
+    List<AssignmentEvaluationRecord> getAllEvaluations();
 }
 
+package com.example.demo.service;
+
+import com.example.demo.model.TaskAssignmentRecord;
+import java.util.List;
+
+public interface TaskAssignmentService {
+    TaskAssignmentRecord assignTask(Long taskId, Long volunteerId);
+    TaskAssignmentRecord updateAssignmentStatus(Long id, String status);
+    List<TaskAssignmentRecord> getAssignmentsByVolunteer(Long volunteerId);
+    List<TaskAssignmentRecord> getAssignmentsByTask(Long taskId);
+    List<TaskAssignmentRecord> getAllAssignments();
+}
+
+package com.example.demo.service;
+
+import com.example.demo.model.TaskRecord;
+import java.util.List;
+
+public interface TaskRecordService {
+    TaskRecord createTask(TaskRecord task);
+    TaskRecord updateTask(Long id, TaskRecord updatedTask);
+    List<TaskRecord> getOpenTasks();
+    TaskRecord getTaskByCode(String code);
+    List<TaskRecord> getAllTasks();
+}
+
+package com.example.demo.service;
+
+import com.example.demo.model.User;
+import java.util.Optional;
+
+public interface UserService {
+    User saveUser(User user);
+    Optional<User> findByEmail(String email);
+    boolean existsByEmail(String email);
+}
+
+package com.example.demo.service;
+
+import com.example.demo.model.VolunteerProfile;
+import java.util.List;
+
+public interface VolunteerProfileService {
+    VolunteerProfile createVolunteer(VolunteerProfile profile);
+    VolunteerProfile getVolunteerById(Long id);
+    List<VolunteerProfile> getAllVolunteers();
+    VolunteerProfile findByVolunteerId(String volunteerId);
+    VolunteerProfile updateAvailability(Long id, String availabilityStatus);
+}
+
+package com.example.demo.service;
+
+import com.example.demo.model.VolunteerSkillRecord;
+import java.util.List;
+
+public interface VolunteerSkillService {
+    VolunteerSkillRecord addOrUpdateSkill(VolunteerSkillRecord skill);
+    List<VolunteerSkillRecord> getSkillsByVolunteer(Long volunteerId);
+    VolunteerSkillRecord getSkillById(Long id);
+    List<VolunteerSkillRecord> getAllSkills();
+}
