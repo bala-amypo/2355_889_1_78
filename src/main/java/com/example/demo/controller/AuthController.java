@@ -1,7 +1,8 @@
 package com.example.demo.controller;
+// AuthController.java
+import com.example.demo.dto.AuthRequest;
+import com.example.demo.dto.AuthResponse;
 
-import com.example.demo.model.AuthRequest;
-import com.example.demo.model.AuthResponse;
 import com.example.demo.security.JwtUtil;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
