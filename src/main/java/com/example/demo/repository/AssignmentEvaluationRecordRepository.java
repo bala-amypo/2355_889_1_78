@@ -5,4 +5,7 @@ import com.example.demo.model.AssignmentEvaluationRecord;
 
 public interface AssignmentEvaluationRecordRepository
         extends JpaRepository<AssignmentEvaluationRecord, Long> {
+
+    AssignmentEvaluationRecord findByAssignmentId(Long assignmentId);
 }
+
