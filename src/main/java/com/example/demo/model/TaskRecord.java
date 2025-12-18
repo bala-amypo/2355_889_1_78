@@ -1,10 +1,8 @@
 package com.example.demo.model;
 
-import java.time.*;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "task_record")
 public class TaskRecord {
 
     @Id
@@ -20,38 +18,40 @@ public class TaskRecord {
     private String priority;
     private String status;
 
-    private LocalDateTime createdAt;
-
-    @PrePersist
-    public void setDefaults() {
-        this.createdAt = LocalDateTime.now();
-        this.status = "OPEN";
-    }
-
     public TaskRecord() {}
 
-    public TaskRecord(String taskCode, String taskName,
-                      String requiredSkill, String requiredSkillLevel,
-                      String priority) {
+    public TaskRecord(Long id, String taskCode, String taskName,
+            String requiredSkill, String requiredSkillLevel,
+            String priority, String status) {
+        this.id = id;
         this.taskCode = taskCode;
         this.taskName = taskName;
         this.requiredSkill = requiredSkill;
         this.requiredSkillLevel = requiredSkillLevel;
         this.priority = priority;
+        this.status = status;
     }
 
-    // getters & setters
     public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
     public String getTaskCode() { return taskCode; }
     public void setTaskCode(String taskCode) { this.taskCode = taskCode; }
+
     public String getTaskName() { return taskName; }
     public void setTaskName(String taskName) { this.taskName = taskName; }
+
     public String getRequiredSkill() { return requiredSkill; }
     public void setRequiredSkill(String requiredSkill) { this.requiredSkill = requiredSkill; }
+
     public String getRequiredSkillLevel() { return requiredSkillLevel; }
-    public void setRequiredSkillLevel(String requiredSkillLevel) { this.requiredSkillLevel = requiredSkillLevel; }
+    public void setRequiredSkillLevel(String requiredSkillLevel) {
+        this.requiredSkillLevel = requiredSkillLevel;
+    }
+
     public String getPriority() { return priority; }
     public void setPriority(String priority) { this.priority = priority; }
+
     public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; } // ✅ moved inside class
+    public void setStatus(String status) { this.status = status; }
 }
