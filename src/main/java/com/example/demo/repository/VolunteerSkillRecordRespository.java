@@ -1,7 +1,7 @@
 package com.example.demo.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.example.demo.model.AssignmentEvaluationRecord;
+import com.example.demo.model.VolunteerSkillRecord;
 public interface VolunteerSkillRecordRepository
         extends JpaRepository<VolunteerSkillRecord, Long> {
 
