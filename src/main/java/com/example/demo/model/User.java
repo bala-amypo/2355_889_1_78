@@ -1,43 +1,81 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Full name is required")
+    private String fullName;
+
+    @Email(message = "Enter a valid email")
+    @NotBlank(message = "Email is required")
     @Column(unique = true)
     private String email;
-    private String fullName;
-    private String password;
-    private String role;
 
-    public User() {}
+    @NotBlank(message = "Password is required")
+    private String password;   // stored as plain text for Review-1
 
-    public User(Long id, String email, String fullName,
-                String password, String role) {
+    @NotBlank(message = "Role is required")
+    private String role;       // ADMIN / CUSTOMER
+
+    public User() {
+    }
+
+    public User(Long id, String fullName, String email, String password, String role) {
         this.id = id;
-        this.email = email;
         this.fullName = fullName;
+        this.email = email;
         this.password = password;
         this.role = role;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    // ✅ Getters & Setters
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getFullName() { return fullName; }
-    public void setFullName(String fullName) { this.fullName = fullName; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    public String getFullName() {
+        return fullName;
+    }
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }

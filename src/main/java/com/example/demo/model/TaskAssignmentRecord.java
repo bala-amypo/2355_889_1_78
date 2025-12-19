@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -12,32 +13,32 @@ public class TaskAssignmentRecord {
 
     private Long taskId;
     private Long volunteerId;
-    private LocalDateTime assignedAt;
     private String status;
+    private String notes;
 
-    public TaskAssignmentRecord() {}
+    private LocalDateTime assignedAt;
 
-    public TaskAssignmentRecord(Long id, Long taskId,
-            Long volunteerId, LocalDateTime assignedAt, String status) {
-        this.id = id;
-        this.taskId = taskId;
-        this.volunteerId = volunteerId;
-        this.assignedAt = assignedAt;
-        this.status = status;
+    @PrePersist
+    public void onAssign() {
+        this.assignedAt = LocalDateTime.now();
+        if (this.status == null) {
+            this.status = "ASSIGNED";
+        }
     }
 
+    // Getters
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
     public Long getTaskId() { return taskId; }
-    public void setTaskId(Long taskId) { this.taskId = taskId; }
-
     public Long getVolunteerId() { return volunteerId; }
-    public void setVolunteerId(Long volunteerId) { this.volunteerId = volunteerId; }
-
-    public LocalDateTime getAssignedAt() { return assignedAt; }
-    public void setAssignedAt(LocalDateTime assignedAt) { this.assignedAt = assignedAt; }
-
     public String getStatus() { return status; }
+    public String getNotes() { return notes; }
+    public LocalDateTime getAssignedAt() { return assignedAt; }
+
+    // Setters
+    public void setId(Long id) { this.id = id; }
+    public void setTaskId(Long taskId) { this.taskId = taskId; }
+    public void setVolunteerId(Long volunteerId) { this.volunteerId = volunteerId; }
     public void setStatus(String status) { this.status = status; }
+    public void setNotes(String notes) { this.notes = notes; }
+    public void setAssignedAt(LocalDateTime assignedAt) { this.assignedAt = assignedAt; }
 }
