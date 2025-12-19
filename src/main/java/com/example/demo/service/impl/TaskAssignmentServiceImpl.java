@@ -1,55 +1,33 @@
-// TaskAssignmentServiceImpl.java
 package com.example.demo.service.impl;
 
-import com.example.demo.model.*;
-import com.example.demo.repository.*;
-import com.example.demo.service.TaskAssignmentService;
-import com.example.demo.util.SkillLevelUtil;
-import com.example.demo.exception.*;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.time.LocalDateTime;
+
+import com.example.demo.model.TaskAssignmentRecord;
+import com.example.demo.repository.TaskAssignmentRecordRepository;
+import com.example.demo.service.TaskAssignmentService;
 
 @Service
-public class TaskAssignmentServiceImpl
-        implements TaskAssignmentService {
+public class TaskAssignmentServiceImpl implements TaskAssignmentService {
 
-    private final TaskAssignmentRecordRepository ar;
-    private final TaskRecordRepository tr;
-    private final VolunteerProfileRepository vr;
-    private final VolunteerSkillRecordRepository sr;
+    @Autowired
+    private TaskAssignmentRecordRepository repository;
 
-    public TaskAssignmentServiceImpl(
-        TaskAssignmentRecordRepository ar,
-        TaskRecordRepository tr,
-        VolunteerProfileRepository vr,
-        VolunteerSkillRecordRepository sr) {
-        this.ar = ar;
-        this.tr = tr;
-        this.vr = vr;
-        this.sr = sr;
+    public TaskAssignmentRecord assignTask(TaskAssignmentRecord assignment) {
+        return repository.save(assignment);
     }
 
-    public TaskAssignmentRecord assignTask(Long taskId) {
-        TaskRecord task = tr.findById(taskId)
-            .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
+    public TaskAssignmentRecord getAssignmentById(Long id) {
+        return repository.findById(id).orElse(null);
+    }
 
-        if (ar.existsByTaskIdAndStatus(taskId,"ACTIVE"))
-            throw new BadRequestException("ACTIVE assignment");
+    public List<TaskAssignmentRecord> getAssignmentsByVolunteer(Long volunteerId) {
+        return repository.findByVolunteerId(volunteerId);
+    }
 
-        for (VolunteerProfile v : vr.findByAvailabilityStatus("AVAILABLE")) {
-            for (VolunteerSkillRecord s : sr.findByVolunteerId(v.getId())) {
-                if (s.getSkillName().equals(task.getRequiredSkill()) &&
-                    SkillLevelUtil.levelRank(s.getSkillLevel()) >=
-                    SkillLevelUtil.levelRank(task.getRequiredSkillLevel())) {
-
-                    TaskAssignmentRecord r = new TaskAssignmentRecord();
-                    r.setTaskId(task.getId());
-                    r.setVolunteerId(v.getId());
-                    r.setAssignedAt(LocalDateTime.now());
-                    return ar.save(r);
-                }
-            }
-        }
-        throw new BadRequestException("required skill level");
+    public List<TaskAssignmentRecord> getAssignmentsByTask(Long taskId) {
+        return repository.findByTaskId(taskId);
     }
 }
