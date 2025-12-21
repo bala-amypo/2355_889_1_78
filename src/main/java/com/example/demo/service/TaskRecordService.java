@@ -9,9 +9,5 @@ public interface TaskRecordService {
 
     TaskRecord getTaskById(Long id);
 
-    TaskRecord getTaskByCode(String taskCode);
-
     List<TaskRecord> getAllTasks();
-
-    TaskRecord updateStatus(Long id, String status);
 }

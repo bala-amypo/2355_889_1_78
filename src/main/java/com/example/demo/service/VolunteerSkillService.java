@@ -7,9 +7,9 @@ public interface VolunteerSkillService {
 
     VolunteerSkillRecord addOrUpdateSkill(VolunteerSkillRecord skill);
 
-    List<VolunteerSkillRecord> getSkillsByVolunteer(Long volunteerId);
-
     VolunteerSkillRecord getSkillById(Long id);
+
+    List<VolunteerSkillRecord> getSkillsByVolunteer(Long volunteerId);
 
     List<VolunteerSkillRecord> getAllSkills();
 }

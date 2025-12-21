@@ -5,7 +5,9 @@ import com.example.demo.model.AssignmentEvaluationRecord;
 
 public interface AssignmentEvaluationService {
 
-    AssignmentEvaluationRecord evaluateAssignment(AssignmentEvaluationRecord evaluation);
+    AssignmentEvaluationRecord addEvaluation(AssignmentEvaluationRecord evaluation);
+
+    AssignmentEvaluationRecord getEvaluationById(Long id);
 
     List<AssignmentEvaluationRecord> getEvaluationsByAssignment(Long assignmentId);
 
