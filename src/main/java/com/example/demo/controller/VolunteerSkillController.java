@@ -1,35 +1,36 @@
 package com.example.demo.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 
-import jakarta.validation.Valid;
-
-import com.example.demo.model.User;
-import com.example.demo.service.UserService;
+import com.example.demo.model.VolunteerSkillRecord;
+import com.example.demo.service.VolunteerSkillService;
 
 @RestController
 @RequestMapping("/api/skills")
-@Tag(name = "Volunteer Skill Controller")
 public class VolunteerSkillController {
 
+    @Autowired
+    VolunteerSkillService service;
+
     @PostMapping
-    public String addOrUpdateSkill(@RequestBody Object skill) {
-        return "Skill added/updated";
+    public VolunteerSkillRecord addOrUpdate(@RequestBody VolunteerSkillRecord skill) {
+        return service.addOrUpdateSkill(skill);
     }
 
     @GetMapping("/volunteer/{volunteerId}")
-    public String getSkillsByVolunteer(@PathVariable Long volunteerId) {
-        return "Skills for volunteer " + volunteerId;
+    public List<VolunteerSkillRecord> getByVolunteer(@PathVariable Long volunteerId) {
+        return service.getSkillsByVolunteer(volunteerId);
     }
 
     @GetMapping("/{id}")
-    public String getSkill(@PathVariable Long id) {
-        return "Get skill " + id;
+    public VolunteerSkillRecord getById(@PathVariable Long id) {
+        return service.getSkillById(id);
     }
 
     @GetMapping
-    public String listSkills() {
-        return "List all skills";
+    public List<VolunteerSkillRecord> getAll() {
+        return service.getAllSkills();
     }
 }
