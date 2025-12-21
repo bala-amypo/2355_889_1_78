@@ -1,39 +1,19 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "volunteer_profiles")
 public class VolunteerProfile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(unique = true)
-    private String volunteerId;  // Unique identifier
-
+    private String volunteerId;  
     private String fullName;
     private String email;
+    private String phone;
     private String availabilityStatus;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
-    // Constructors
-    public VolunteerProfile() {}
-
-    public VolunteerProfile(String volunteerId, String fullName, String email, String availabilityStatus) {
-        this.volunteerId = volunteerId;
-        this.fullName = fullName;
-        this.email = email;
-        this.availabilityStatus = availabilityStatus;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -66,27 +46,19 @@ public class VolunteerProfile {
         this.email = email;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public String getAvailabilityStatus() {
         return availabilityStatus;
     }
 
     public void setAvailabilityStatus(String availabilityStatus) {
         this.availabilityStatus = availabilityStatus;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }
