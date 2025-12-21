@@ -1,40 +1,42 @@
 package com.example.demo.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 
-import jakarta.validation.Valid;
-
-import com.example.demo.model.User;
-import com.example.demo.service.UserService;
+import com.example.demo.model.TaskAssignmentRecord;
+import com.example.demo.service.TaskAssignmentService;
 
 @RestController
 @RequestMapping("/api/assignments")
-@Tag(name = "Task Assignment Controller")
 public class TaskAssignmentController {
 
+    @Autowired
+    TaskAssignmentService service;
+
     @PostMapping("/assign/{taskId}")
-    public String autoAssign(@PathVariable Long taskId) {
-        return "Auto assigned task " + taskId;
+    public TaskAssignmentRecord assign(@PathVariable Long taskId) {
+        return service.assignTask(taskId);
     }
 
     @PutMapping("/{id}/status")
-    public String updateStatus(@PathVariable Long id) {
-        return "Assignment status updated " + id;
+    public TaskAssignmentRecord updateStatus(@PathVariable Long id,
+                                             @RequestParam String status) {
+        return service.updateAssignmentStatus(id, status);
     }
 
     @GetMapping("/volunteer/{volunteerId}")
-    public String getByVolunteer(@PathVariable Long volunteerId) {
-        return "Assignments for volunteer " + volunteerId;
+    public List<TaskAssignmentRecord> byVolunteer(@PathVariable Long volunteerId) {
+        return service.getAssignmentsByVolunteer(volunteerId);
     }
 
     @GetMapping("/task/{taskId}")
-    public String getByTask(@PathVariable Long taskId) {
-        return "Assignments for task " + taskId;
+    public List<TaskAssignmentRecord> byTask(@PathVariable Long taskId) {
+        return service.getAssignmentsByTask(taskId);
     }
 
     @GetMapping
-    public String listAssignments() {
-        return "List all assignments";
+    public List<TaskAssignmentRecord> all() {
+        return service.getAllAssignments();
     }
 }

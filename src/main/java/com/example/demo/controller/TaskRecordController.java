@@ -1,40 +1,43 @@
 package com.example.demo.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 
-import jakarta.validation.Valid;
-
-import com.example.demo.model.User;
-import com.example.demo.service.UserService;
+import com.example.demo.model.TaskRecord;
+import com.example.demo.service.TaskRecordService;
 
 @RestController
 @RequestMapping("/api/tasks")
-@Tag(name = "Task Record Controller")
 public class TaskRecordController {
 
+    @Autowired
+    private TaskRecordService service;
+
     @PostMapping
-    public String createTask(@RequestBody Object task) {
-        return "Task created";
-    }
-
-    @PutMapping("/{id}")
-    public String updateTask(@PathVariable Long id) {
-        return "Task updated " + id;
-    }
-
-    @GetMapping("/open")
-    public String listOpenTasks() {
-        return "List open tasks";
+    public TaskRecord createTask(@RequestBody TaskRecord task) {
+        return service.createTask(task);
     }
 
     @GetMapping("/{id}")
-    public String getTask(@PathVariable Long id) {
-        return "Get task " + id;
+    public TaskRecord getTaskById(@PathVariable Long id) {
+        return service.getTaskById(id);
+    }
+
+    @GetMapping("/code/{taskCode}")
+    public TaskRecord getByCode(@PathVariable String taskCode) {
+        return service.getTaskByCode(taskCode);
     }
 
     @GetMapping
-    public String listTasks() {
-        return "List all tasks";
+    public List<TaskRecord> getAllTasks() {
+        return service.getAllTasks();
+    }
+
+    @PutMapping("/{id}/status")
+    public TaskRecord updateStatus(
+            @PathVariable Long id,
+            @RequestParam String status) {
+        return service.updateStatus(id, status);
     }
 }

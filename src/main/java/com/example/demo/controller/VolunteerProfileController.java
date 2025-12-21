@@ -1,40 +1,43 @@
 package com.example.demo.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 
-import jakarta.validation.Valid;
-
-import com.example.demo.model.User;
-import com.example.demo.service.UserService;
+import com.example.demo.model.VolunteerProfile;
+import com.example.demo.service.VolunteerProfileService;
 
 @RestController
 @RequestMapping("/api/volunteers")
-@Tag(name = "Volunteer Profile Controller")
 public class VolunteerProfileController {
 
+    @Autowired
+    VolunteerProfileService service;
+
     @PostMapping
-    public String createVolunteer(@RequestBody Object volunteer) {
-        return "Volunteer created";
+    public VolunteerProfile create(@RequestBody VolunteerProfile profile) {
+        return service.createVolunteer(profile);
     }
 
     @GetMapping("/{id}")
-    public String getVolunteer(@PathVariable Long id) {
-        return "Get volunteer " + id;
+    public VolunteerProfile getById(@PathVariable Long id) {
+        return service.getVolunteerById(id);
     }
 
     @GetMapping
-    public String listVolunteers() {
-        return "List all volunteers";
-    }
-
-    @PutMapping("/{id}/availability")
-    public String updateAvailability(@PathVariable Long id) {
-        return "Availability updated for " + id;
+    public List<VolunteerProfile> getAll() {
+        return service.getAllVolunteers();
     }
 
     @GetMapping("/lookup/{volunteerId}")
-    public String lookupVolunteer(@PathVariable Long volunteerId) {
-        return "Lookup volunteer " + volunteerId;
+    public VolunteerProfile lookup(@PathVariable String volunteerId) {
+        return service.findByVolunteerId(volunteerId);
+    }
+
+    @PutMapping("/{id}/availability")
+    public VolunteerProfile updateAvailability(
+            @PathVariable Long id,
+            @RequestParam String availabilityStatus) {
+        return service.updateAvailability(id, availabilityStatus);
     }
 }

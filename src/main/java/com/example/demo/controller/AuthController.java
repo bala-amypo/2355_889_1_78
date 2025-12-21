@@ -1,25 +1,25 @@
 package com.example.demo.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
 
 @RestController
 @RequestMapping("/auth")
-@Tag(name = "Auth Controller")
 public class AuthController {
 
+    @Autowired
+    UserService service;
+
     @PostMapping("/register")
-    public String register(@RequestBody Object request) {
-        return "User registered";
+    public User register(@RequestBody User user) {
+        return service.saveUser(user);
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody Object request) {
-        return "User logged in";
+    public User login(@RequestBody User user) {
+        return service.findByEmail(user.getEmail());
     }
 }
