@@ -1,31 +1,20 @@
-package com.example.demo.controller;
+package com.example.demo.config;
 
-import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.servers.Server;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
-import com.example.demo.model.AssignmentEvaluationRecord;
-import com.example.demo.service.AssignmentEvaluationService;
+@Configuration
+public class SwaggerConfig {
 
-@RestController
-@RequestMapping("/api/evaluations")
-public class AssignmentEvaluationController {
-
-    @Autowired
-    AssignmentEvaluationService service;
-
-    @PostMapping
-    public AssignmentEvaluationRecord submit(@RequestBody AssignmentEvaluationRecord e) {
-        return service.evaluateAssignment(e);
-    }
-
-    @GetMapping("/assignment/{assignmentId}")
-    public List<AssignmentEvaluationRecord> byAssignment(@PathVariable Long assignmentId) {
-        return service.getEvaluationsByAssignment(assignmentId);
-    }
-
-    @GetMapping
-    public List<AssignmentEvaluationRecord> all() {
-        return service.getAllEvaluations();
-    }
+    @Bean
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+                // You need to change the port as per your server
+                .servers(List.of(
+                        new Server().url("https://9271.408procr.amypo.ai")
+                ));
+        }
 }
