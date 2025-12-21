@@ -5,11 +5,13 @@ import com.example.demo.model.TaskAssignmentRecord;
 
 public interface TaskAssignmentService {
 
-    TaskAssignmentRecord assignTask(TaskAssignmentRecord assignment);
+    TaskAssignmentRecord assignTask(Long taskId);
 
-    TaskAssignmentRecord getAssignmentById(Long id);
+    TaskAssignmentRecord updateAssignmentStatus(Long id, String status);
 
     List<TaskAssignmentRecord> getAssignmentsByVolunteer(Long volunteerId);
 
     List<TaskAssignmentRecord> getAssignmentsByTask(Long taskId);
+
+    List<TaskAssignmentRecord> getAllAssignments();
 }
