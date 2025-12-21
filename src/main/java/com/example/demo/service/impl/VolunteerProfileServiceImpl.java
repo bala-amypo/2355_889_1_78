@@ -1,9 +1,8 @@
 package com.example.demo.service.impl;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 
 import com.example.demo.model.VolunteerProfile;
 import com.example.demo.repository.VolunteerProfileRepository;
@@ -13,36 +12,36 @@ import com.example.demo.service.VolunteerProfileService;
 public class VolunteerProfileServiceImpl implements VolunteerProfileService {
 
     @Autowired
-    private VolunteerProfileRepository repository;
+    VolunteerProfileRepository repo;
 
     @Override
     public VolunteerProfile createVolunteer(VolunteerProfile profile) {
-        return repository.save(profile);
+        return repo.save(profile);
     }
 
     @Override
     public VolunteerProfile getVolunteerById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("VolunteerProfile not found with id: " + id));
+        return repo.findById(id).orElse(null);
     }
 
     @Override
     public List<VolunteerProfile> getAllVolunteers() {
-        return repository.findAll();
+        return repo.findAll();
     }
 
     @Override
     public VolunteerProfile findByVolunteerId(String volunteerId) {
-        return repository.findByVolunteerId(volunteerId)
-                .orElseThrow(() -> new RuntimeException("VolunteerProfile not found with volunteerId: " + volunteerId));
+        if (volunteerId == null) return null;
+        return repo.findByVolunteerId(volunteerId);
     }
 
     @Override
-    public VolunteerProfile updateAvailability(Long id, String status) {
-        VolunteerProfile v = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("VolunteerProfile not found with id: " + id));
-
-        v.setAvailabilityStatus(status);
-        return repository.save(v);
+    public VolunteerProfile updateAvailability(Long id, String availabilityStatus) {
+        VolunteerProfile v = repo.findById(id).orElse(null);
+        if (v != null) {
+            v.setAvailabilityStatus(availabilityStatus);
+            return repo.save(v);
+        }
+        return null;
     }
 }

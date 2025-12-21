@@ -1,16 +1,10 @@
 package com.example.demo.repository;
 
-import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
 import com.example.demo.model.VolunteerProfile;
 
-@Repository
-public interface VolunteerProfileRepository extends JpaRepository<VolunteerProfile, Long> {
+public interface VolunteerProfileRepository
+        extends JpaRepository<VolunteerProfile, Long> {
 
-    // Query by volunteerId
-    Optional<VolunteerProfile> findByVolunteerId(String volunteerId);
-
+    VolunteerProfile findByVolunteerId(String volunteerId);
 }
