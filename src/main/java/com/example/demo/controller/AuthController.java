@@ -10,37 +10,16 @@ import com.example.demo.service.UserService;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin
+@Tag(name = "Auth Controller")
 public class AuthController {
 
-    @Autowired
-    private UserService userService;
-
-    // ---------------- REGISTER ----------------
     @PostMapping("/register")
-    public User register(@Valid @RequestBody User user) {
-
-        if (userService.existsByEmail(user.getEmail())) {
-            return null; // simple handling for Review-1
-        }
-
-        return userService.saveUser(user);
+    public String register(@RequestBody Object request) {
+        return "User registered";
     }
 
-    // ---------------- LOGIN ----------------
     @PostMapping("/login")
-    public String login(@RequestBody User user) {
-
-        User existingUser = userService.findByEmail(user.getEmail());
-
-        if (existingUser == null) {
-            return "User not found";
-        }
-
-        if (!existingUser.getPassword().equals(user.getPassword())) {
-            return "Invalid password";
-        }
-
-        return "Login successful";
+    public String login(@RequestBody Object request) {
+        return "User logged in";
     }
 }

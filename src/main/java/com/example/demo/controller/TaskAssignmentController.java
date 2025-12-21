@@ -1,38 +1,31 @@
-package com.example.demo.controller;
-
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import com.example.demo.model.TaskAssignmentRecord;
-import com.example.demo.service.TaskAssignmentService;
 
 @RestController
 @RequestMapping("/api/assignments")
-@CrossOrigin
+@Tag(name = "Task Assignment Controller")
 public class TaskAssignmentController {
 
-    @Autowired
-    private TaskAssignmentService service;
-
-    @PostMapping
-    public TaskAssignmentRecord assignTask(@RequestBody TaskAssignmentRecord assignment) {
-        return service.assignTask(assignment);
+    @PostMapping("/assign/{taskId}")
+    public String autoAssign(@PathVariable Long taskId) {
+        return "Auto assigned task " + taskId;
     }
 
-    @GetMapping("/{id}")
-    public TaskAssignmentRecord getAssignment(@PathVariable Long id) {
-        return service.getAssignmentById(id);
+    @PutMapping("/{id}/status")
+    public String updateStatus(@PathVariable Long id) {
+        return "Assignment status updated " + id;
     }
 
     @GetMapping("/volunteer/{volunteerId}")
-    public List<TaskAssignmentRecord> getByVolunteer(@PathVariable Long volunteerId) {
-        return service.getAssignmentsByVolunteer(volunteerId);
+    public String getByVolunteer(@PathVariable Long volunteerId) {
+        return "Assignments for volunteer " + volunteerId;
     }
 
     @GetMapping("/task/{taskId}")
-    public List<TaskAssignmentRecord> getByTask(@PathVariable Long taskId) {
-        return service.getAssignmentsByTask(taskId);
+    public String getByTask(@PathVariable Long taskId) {
+        return "Assignments for task " + taskId;
+    }
+
+    @GetMapping
+    public String listAssignments() {
+        return "List all assignments";
     }
 }
