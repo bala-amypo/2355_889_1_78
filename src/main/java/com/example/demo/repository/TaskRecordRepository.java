@@ -3,8 +3,5 @@ package com.example.demo.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.demo.model.TaskRecord;
 
-public interface TaskRecordRepository
-        extends JpaRepository<TaskRecord, Long> {
-
-    TaskRecord findByTaskCode(String taskCode);
+public interface TaskRecordRepository extends JpaRepository<TaskRecord, Long> {
 }
