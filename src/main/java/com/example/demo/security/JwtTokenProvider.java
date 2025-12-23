@@ -27,13 +27,9 @@ public class JwtTokenProvider {
 
     public String generateToken(String email) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, email);
-    }
-
-    private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(subject)
+                .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
@@ -41,10 +37,10 @@ public class JwtTokenProvider {
     }
 
     public String extractEmail(String token) {
-        return extractClaims(token).getSubject();
+        return getClaims(token).getSubject();
     }
 
-    private Claims extractClaims(String token) {
+    private Claims getClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()
@@ -58,13 +54,9 @@ public class JwtTokenProvider {
                     .setSigningKey(getSigningKey())
                     .build()
                     .parseClaimsJws(token);
-            return !isTokenExpired(token);
+            return true;
         } catch (Exception e) {
             return false;
         }
-    }
-
-    private boolean isTokenExpired(String token) {
-        return extractClaims(token).getExpiration().before(new Date());
     }
 }
