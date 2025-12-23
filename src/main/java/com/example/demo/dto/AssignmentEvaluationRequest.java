@@ -1,13 +1,17 @@
 package com.example.demo.dto;
 
-public class AuthRequest {
-    private String email;
-    private String password;
+public class AssignmentEvaluationRequest {
+    private Long assignmentId;
+    private Integer rating;
+    private String feedback;
     
     // Getters and Setters
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public Long getAssignmentId() { return assignmentId; }
+    public void setAssignmentId(Long id) { this.assignmentId = id; }
     
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    public Integer getRating() { return rating; }
+    public void setRating(Integer rating) { this.rating = rating; }
+    
+    public String getFeedback() { return feedback; }
+    public void setFeedback(String feedback) { this.feedback = feedback; }
 }
