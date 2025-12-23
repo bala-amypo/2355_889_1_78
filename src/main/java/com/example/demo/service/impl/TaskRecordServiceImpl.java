@@ -1,46 +1,87 @@
-package com.example.demo.service.impl;
+package com.example.demo.service;
 
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import java.util.List;
-
+import com.example.demo.dto.TaskRecordRequest;
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.TaskRecord;
 import com.example.demo.repository.TaskRecordRepository;
-import com.example.demo.service.TaskRecordService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 
 @Service
 public class TaskRecordServiceImpl implements TaskRecordService {
-
-    @Autowired
-    private TaskRecordRepository repo;
-
-    @Override
-    public TaskRecord createTask(TaskRecord task) {
-        return repo.save(task);
+    
+    private final TaskRecordRepository repository;
+    
+    public TaskRecordServiceImpl(TaskRecordRepository repository) {
+        this.repository = repository;
     }
-
+    
+    @Override
+    @Transactional
+    public TaskRecord createTask(TaskRecordRequest request) {
+        // Check for duplicate task code
+        if (repository.existsByTaskCode(request.getTaskCode())) {
+            throw new BadRequestException("required skill level");
+        }
+        
+        try {
+            TaskRecord task = new TaskRecord();
+            task.setTaskCode(request.getTaskCode());
+            task.setTaskName(request.getTaskName());
+            task.setRequiredSkill(request.getRequiredSkill());
+            task.setRequiredSkillLevel(
+                TaskRecord.SkillLevel.valueOf(request.getRequiredSkillLevel().toUpperCase())
+            );
+            task.setPriority(request.getPriority());
+            task.setStatus(TaskRecord.TaskStatus.OPEN);
+            
+            return repository.save(task);
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("required skill level");
+        }
+    }
+    
+    @Override
+    @Transactional
+    public TaskRecord updateTask(Long id, TaskRecordRequest request) {
+        TaskRecord task = repository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("required skill level"));
+        
+        try {
+            task.setTaskName(request.getTaskName());
+            task.setRequiredSkill(request.getRequiredSkill());
+            task.setRequiredSkillLevel(
+                TaskRecord.SkillLevel.valueOf(request.getRequiredSkillLevel().toUpperCase())
+            );
+            task.setPriority(request.getPriority());
+            
+            return repository.save(task);
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("required skill level");
+        }
+    }
+    
+    @Override
+    public List<TaskRecord> getOpenTasks() {
+        return repository.findByStatus(TaskRecord.TaskStatus.OPEN);
+    }
+    
+    @Override
+    public TaskRecord getTaskByCode(String code) {
+        return repository.findByTaskCode(code)
+            .orElseThrow(() -> new ResourceNotFoundException("required skill level"));
+    }
+    
     @Override
     public TaskRecord getTaskById(Long id) {
-        return repo.findById(id).orElse(null);
+        return repository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("required skill level"));
     }
-
-    @Override
-    public TaskRecord getTaskByCode(String taskCode) {
-        return repo.findByTaskCode(taskCode);
-    }
-
+    
     @Override
     public List<TaskRecord> getAllTasks() {
-        return repo.findAll();
-    }
-
-    @Override
-    public TaskRecord updateStatus(Long id, String status) {
-        TaskRecord task = repo.findById(id).orElse(null);
-        if (task != null) {
-            task.setStatus(status);
-            return repo.save(task);
-        }
-        return null;
+        return repository.findAll();
     }
 }
