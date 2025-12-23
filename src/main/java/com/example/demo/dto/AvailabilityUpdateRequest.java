@@ -1,13 +1,6 @@
-package com.example.demo.dto;
-
-public class AvailabilityUpdateRequest {
-    
+public class AssignmentStatusRequest {
     private String status;
     
-    // TODO: Add constructors
-    
-    
-    // TODO: Add getters and setters
-    
-    
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }
