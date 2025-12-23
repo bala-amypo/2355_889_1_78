@@ -1,43 +1,57 @@
 package com.example.demo.controller;
 
-import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import java.util.List;
-
+import com.example.demo.dto.AvailabilityUpdateRequest;
+import com.example.demo.dto.VolunteerProfileRequest;
 import com.example.demo.model.VolunteerProfile;
 import com.example.demo.service.VolunteerProfileService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/volunteers")
+@SecurityRequirement(name = "bearerAuth")
+@Tag(name = "Volunteer Profile", description = "Volunteer profile management")
 public class VolunteerProfileController {
-
-    @Autowired
-    VolunteerProfileService service;
-
+    
+    private final VolunteerProfileService service;
+    
+    public VolunteerProfileController(VolunteerProfileService service) {
+        this.service = service;
+    }
+    
     @PostMapping
-    public VolunteerProfile create(@RequestBody VolunteerProfile profile) {
-        return service.createVolunteer(profile);
+    @Operation(summary = "Create volunteer profile")
+    public ResponseEntity<VolunteerProfile> createVolunteer(@RequestBody VolunteerProfileRequest request) {
+        return ResponseEntity.ok(service.createVolunteer(request));
     }
-
-    @GetMapping("/{id}")
-    public VolunteerProfile getById(@PathVariable Long id) {
-        return service.getVolunteerById(id);
-    }
-
+    
     @GetMapping
-    public List<VolunteerProfile> getAll() {
-        return service.getAllVolunteers();
+    @Operation(summary = "Get all volunteers")
+    public ResponseEntity<List<VolunteerProfile>> getAllVolunteers() {
+        return ResponseEntity.ok(service.getAllVolunteers());
     }
-
-    @GetMapping("/lookup/{volunteerId}")
-    public VolunteerProfile lookup(@PathVariable String volunteerId) {
-        return service.findByVolunteerId(volunteerId);
+    
+    @GetMapping("/{id}")
+    @Operation(summary = "Get volunteer by ID")
+    public ResponseEntity<VolunteerProfile> getVolunteer(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getVolunteerById(id));
     }
-
+    
     @PutMapping("/{id}/availability")
-    public VolunteerProfile updateAvailability(
-            @PathVariable Long id,
-            @RequestParam String availabilityStatus) {
-        return service.updateAvailability(id, availabilityStatus);
+    @Operation(summary = "Update volunteer availability status")
+    public ResponseEntity<VolunteerProfile> updateAvailability(
+            @PathVariable Long id, 
+            @RequestBody AvailabilityUpdateRequest request) {
+        return ResponseEntity.ok(service.updateAvailability(id, request.getStatus()));
+    }
+    
+    @GetMapping("/lookup/{volunteerId}")
+    @Operation(summary = "Lookup volunteer by volunteer ID")
+    public ResponseEntity<VolunteerProfile> lookupVolunteer(@PathVariable Long volunteerId) {
+        return ResponseEntity.ok(service.getVolunteerById(volunteerId));
     }
 }

@@ -1,43 +1,54 @@
 package com.example.demo.controller;
 
-import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import java.util.List;
-
+import com.example.demo.dto.TaskRecordRequest;
 import com.example.demo.model.TaskRecord;
 import com.example.demo.service.TaskRecordService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/tasks")
+@SecurityRequirement(name = "bearerAuth")
+@Tag(name = "Task Records", description = "Task management")
 public class TaskRecordController {
-
-    @Autowired
-    private TaskRecordService service;
-
+    
+    private final TaskRecordService service;
+    
+    public TaskRecordController(TaskRecordService service) {
+        this.service = service;
+    }
+    
     @PostMapping
-    public TaskRecord createTask(@RequestBody TaskRecord task) {
-        return service.createTask(task);
+    @Operation(summary = "Create task")
+    public ResponseEntity<TaskRecord> createTask(@RequestBody TaskRecordRequest request) {
+        return ResponseEntity.ok(service.createTask(request));
     }
-
-    @GetMapping("/{id}")
-    public TaskRecord getTaskById(@PathVariable Long id) {
-        return service.getTaskById(id);
+    
+    @PutMapping("/{id}")
+    @Operation(summary = "Update task")
+    public ResponseEntity<TaskRecord> updateTask(@PathVariable Long id, @RequestBody TaskRecordRequest request) {
+        return ResponseEntity.ok(service.updateTask(id, request));
     }
-
-    @GetMapping("/code/{taskCode}")
-    public TaskRecord getByCode(@PathVariable String taskCode) {
-        return service.getTaskByCode(taskCode);
+    
+    @GetMapping("/open")
+    @Operation(summary = "Get all open tasks")
+    public ResponseEntity<List<TaskRecord>> getOpenTasks() {
+        return ResponseEntity.ok(service.getOpenTasks());
     }
-
+    
+    @GetMapping("/{taskId}")
+    @Operation(summary = "Get task by task code")
+    public ResponseEntity<TaskRecord> getTaskByCode(@PathVariable String taskId) {
+        return ResponseEntity.ok(service.getTaskByCode(taskId));
+    }
+    
     @GetMapping
-    public List<TaskRecord> getAllTasks() {
-        return service.getAllTasks();
-    }
-
-    @PutMapping("/{id}/status")
-    public TaskRecord updateStatus(
-            @PathVariable Long id,
-            @RequestParam String status) {
-        return service.updateStatus(id, status);
+    @Operation(summary = "Get all tasks")
+    public ResponseEntity<List<TaskRecord>> getAllTasks() {
+        return ResponseEntity.ok(service.getAllTasks());
     }
 }

@@ -1,6 +1,6 @@
 package com.example.demo.dto;
 
-public class AssignmentStatusU{
+public class AssignmentStatusUpdateRequest{
     
     private String status;
     
