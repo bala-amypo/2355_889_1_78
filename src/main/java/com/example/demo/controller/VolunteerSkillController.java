@@ -37,7 +37,6 @@ public class VolunteerSkillController {
         return ResponseEntity.ok(service.getSkillsByVolunteerId(volunteerId));
     }
 
-    // ✅ FIXED — String skillName (NOT Long)
     @GetMapping("/name/{skillName}")
     @Operation(summary = "Get skills by skill name")
     public ResponseEntity<List<VolunteerSkillRecord>> getSkillsByName(
@@ -47,4 +46,7 @@ public class VolunteerSkillController {
 
     @GetMapping
     @Operation(summary = "Get all skills")
-    public ResponseEntity<List<VolunteerSkillRecord>> getAllSkills()
+    public ResponseEntity<List<VolunteerSkillRecord>> getAllSkills() {
+        return ResponseEntity.ok(service.getAllSkills());
+    }
+}
