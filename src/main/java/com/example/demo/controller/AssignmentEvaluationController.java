@@ -1,31 +1,43 @@
 package com.example.demo.controller;
 
-import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import java.util.List;
-
+import com.example.demo.dto.AssignmentEvaluationRequest;
 import com.example.demo.model.AssignmentEvaluationRecord;
 import com.example.demo.service.AssignmentEvaluationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/evaluations")
+@SecurityRequirement(name = "bearerAuth")
+@Tag(name = "Assignment Evaluations", description = "Assignment evaluation operations")
 public class AssignmentEvaluationController {
-
-    @Autowired
-    AssignmentEvaluationService service;
-
+    
+    private final AssignmentEvaluationService service;
+    
+    public AssignmentEvaluationController(AssignmentEvaluationService service) {
+        this.service = service;
+    }
+    
     @PostMapping
-    public AssignmentEvaluationRecord submit(@RequestBody AssignmentEvaluationRecord e) {
-        return service.evaluateAssignment(e);
+    @Operation(summary = "Submit evaluation for assignment")
+    public ResponseEntity<AssignmentEvaluationRecord> submitEvaluation(
+            @RequestBody AssignmentEvaluationRequest request) {
+        return ResponseEntity.ok(service.evaluateAssignment(request));
     }
-
+    
     @GetMapping("/assignment/{assignmentId}")
-    public List<AssignmentEvaluationRecord> byAssignment(@PathVariable Long assignmentId) {
-        return service.getEvaluationsByAssignment(assignmentId);
+    @Operation(summary = "Get evaluations by assignment")
+    public ResponseEntity<List<AssignmentEvaluationRecord>> getByAssignment(@PathVariable Long assignmentId) {
+        return ResponseEntity.ok(service.getEvaluationsByAssignment(assignmentId));
     }
-
+    
     @GetMapping
-    public List<AssignmentEvaluationRecord> all() {
-        return service.getAllEvaluations();
+    @Operation(summary = "Get all evaluations")
+    public ResponseEntity<List<AssignmentEvaluationRecord>> getAllEvaluations() {
+        return ResponseEntity.ok(service.getAllEvaluations());
     }
 }

@@ -1,42 +1,56 @@
 package com.example.demo.controller;
 
-import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import java.util.List;
-
+import com.example.demo.dto.AssignmentStatusRequest;
 import com.example.demo.model.TaskAssignmentRecord;
 import com.example.demo.service.TaskAssignmentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/assignments")
+@SecurityRequirement(name = "bearerAuth")
+@Tag(name = "Task Assignments", description = "Task assignment operations")
 public class TaskAssignmentController {
-
-    @Autowired
-    TaskAssignmentService service;
-
+    
+    private final TaskAssignmentService service;
+    
+    public TaskAssignmentController(TaskAssignmentService service) {
+        this.service = service;
+    }
+    
     @PostMapping("/assign/{taskId}")
-    public TaskAssignmentRecord assign(@PathVariable Long taskId) {
-        return service.assignTask(taskId);
+    @Operation(summary = "Auto-assign task to best matching volunteer")
+    public ResponseEntity<TaskAssignmentRecord> assignTask(@PathVariable Long taskId) {
+        return ResponseEntity.ok(service.assignTask(taskId));
     }
-
+    
     @PutMapping("/{id}/status")
-    public TaskAssignmentRecord updateStatus(@PathVariable Long id,
-                                             @RequestParam String status) {
-        return service.updateAssignmentStatus(id, status);
+    @Operation(summary = "Update assignment status")
+    public ResponseEntity<TaskAssignmentRecord> updateStatus(
+            @PathVariable Long id, 
+            @RequestBody AssignmentStatusRequest request) {
+        return ResponseEntity.ok(service.updateAssignmentStatus(id, request.getStatus()));
     }
-
+    
     @GetMapping("/volunteer/{volunteerId}")
-    public List<TaskAssignmentRecord> byVolunteer(@PathVariable Long volunteerId) {
-        return service.getAssignmentsByVolunteer(volunteerId);
+    @Operation(summary = "Get assignments by volunteer")
+    public ResponseEntity<List<TaskAssignmentRecord>> getByVolunteer(@PathVariable Long volunteerId) {
+        return ResponseEntity.ok(service.getAssignmentsByVolunteer(volunteerId));
     }
-
+    
     @GetMapping("/task/{taskId}")
-    public List<TaskAssignmentRecord> byTask(@PathVariable Long taskId) {
-        return service.getAssignmentsByTask(taskId);
+    @Operation(summary = "Get assignments by task")
+    public ResponseEntity<List<TaskAssignmentRecord>> getByTask(@PathVariable Long taskId) {
+        return ResponseEntity.ok(service.getAssignmentsByTask(taskId));
     }
-
+    
     @GetMapping
-    public List<TaskAssignmentRecord> all() {
-        return service.getAllAssignments();
+    @Operation(summary = "Get all assignments")
+    public ResponseEntity<List<TaskAssignmentRecord>> getAllAssignments() {
+        return ResponseEntity.ok(service.getAllAssignments());
     }
 }
