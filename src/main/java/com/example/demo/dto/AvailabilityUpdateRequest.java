@@ -1,4 +1,6 @@
-public class AssignmentStatusRequest {
+package com.example.demo.dto;
+
+public class AvailabilityUpdateRequest {
     private String status;
     
     public String getStatus() { return status; }
