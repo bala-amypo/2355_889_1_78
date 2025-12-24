@@ -2,15 +2,10 @@ package com.example.demo.dto;
 
 public class AvailabilityUpdateRequest {
 
-    private String availabilityStatus;
+    private String status;
 
     public AvailabilityUpdateRequest() {}
 
-    public String getAvailabilityStatus() {
-        return availabilityStatus;
-    }
-
-    public void setAvailabilityStatus(String availabilityStatus) {
-        this.availabilityStatus = availabilityStatus;
-    }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }
