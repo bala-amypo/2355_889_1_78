@@ -1,4 +1,4 @@
-package com.example.demo.servlet;
+package com.example.demo;
 
 import jakarta.servlet.http.*;
 import java.io.IOException;
