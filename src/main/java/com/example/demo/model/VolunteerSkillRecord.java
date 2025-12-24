@@ -3,13 +3,11 @@ package com.example.demo.model;
 import java.time.LocalDateTime;
 
 public class VolunteerSkillRecord {
-
-    private Long id;
     private Long volunteerId;
     private String skillName;
     private String skillLevel;
     private boolean certified;
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    private LocalDateTime updatedAt;
 
     public Long getVolunteerId() { return volunteerId; }
     public void setVolunteerId(Long volunteerId) { this.volunteerId = volunteerId; }
@@ -24,4 +22,5 @@ public class VolunteerSkillRecord {
     public void setCertified(boolean certified) { this.certified = certified; }
 
     public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 }

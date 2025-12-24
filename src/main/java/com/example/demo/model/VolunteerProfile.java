@@ -1,7 +1,6 @@
 package com.example.demo.model;
 
 public class VolunteerProfile {
-
     private Long id;
     private String volunteerId;
     private String fullName;
@@ -9,7 +8,6 @@ public class VolunteerProfile {
     private String phone;
     private String availabilityStatus;
 
-    // getters & setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -26,5 +24,7 @@ public class VolunteerProfile {
     public void setPhone(String phone) { this.phone = phone; }
 
     public String getAvailabilityStatus() { return availabilityStatus; }
-    public void setAvailabilityStatus(String availabilityStatus) { this.availabilityStatus = availabilityStatus; }
+    public void setAvailabilityStatus(String availabilityStatus) {
+        this.availabilityStatus = availabilityStatus;
+    }
 }

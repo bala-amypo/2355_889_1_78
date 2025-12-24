@@ -1,7 +1,6 @@
 package com.example.demo.model;
 
 public class TaskRecord {
-
     private Long id;
     private String taskCode;
     private String taskName;
@@ -23,7 +22,9 @@ public class TaskRecord {
     public void setRequiredSkill(String requiredSkill) { this.requiredSkill = requiredSkill; }
 
     public String getRequiredSkillLevel() { return requiredSkillLevel; }
-    public void setRequiredSkillLevel(String requiredSkillLevel) { this.requiredSkillLevel = requiredSkillLevel; }
+    public void setRequiredSkillLevel(String requiredSkillLevel) {
+        this.requiredSkillLevel = requiredSkillLevel;
+    }
 
     public String getPriority() { return priority; }
     public void setPriority(String priority) { this.priority = priority; }

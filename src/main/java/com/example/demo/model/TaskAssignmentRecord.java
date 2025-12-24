@@ -1,7 +1,6 @@
 package com.example.demo.model;
 
 public class TaskAssignmentRecord {
-
     private Long id;
     private Long taskId;
     private Long volunteerId;
