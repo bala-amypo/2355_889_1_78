@@ -7,9 +7,5 @@ public interface VolunteerSkillService {
 
     VolunteerSkillRecord saveSkill(VolunteerSkillRecord record);
 
-    List<VolunteerSkillRecord> getSkillsByVolunteerId(Long volunteerId);
-
-    List<VolunteerSkillRecord> getSkillsByName(String skillName);
-
-    List<VolunteerSkillRecord> getAllSkills();
+    List<VolunteerSkillRecord> getByVolunteer(Long volunteerId);
 }

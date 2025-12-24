@@ -21,17 +21,7 @@ public class VolunteerSkillServiceImpl implements VolunteerSkillService {
     }
 
     @Override
-    public List<VolunteerSkillRecord> getSkillsByVolunteerId(Long volunteerId) {
+    public List<VolunteerSkillRecord> getByVolunteer(Long volunteerId) {
         return repository.findByVolunteerId(volunteerId);
-    }
-
-    @Override
-    public List<VolunteerSkillRecord> getSkillsByName(String skillName) {
-        return repository.findBySkillName(skillName);
-    }
-
-    @Override
-    public List<VolunteerSkillRecord> getAllSkills() {
-        return repository.findAll();
     }
 }

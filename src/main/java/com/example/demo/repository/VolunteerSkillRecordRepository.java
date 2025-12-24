@@ -8,5 +8,4 @@ public interface VolunteerSkillRepository
         extends JpaRepository<VolunteerSkillRecord, Long> {
 
     List<VolunteerSkillRecord> findByVolunteerId(Long volunteerId);
-    List<VolunteerSkillRecord> findBySkillName(String skillName);
 }
