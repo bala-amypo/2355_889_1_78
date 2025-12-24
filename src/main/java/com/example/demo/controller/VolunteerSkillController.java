@@ -4,6 +4,7 @@ import com.example.demo.dto.VolunteerSkillRequest;
 import com.example.demo.model.VolunteerSkillRecord;
 import com.example.demo.service.VolunteerSkillService;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -17,7 +18,8 @@ public class VolunteerSkillController {
     }
 
     @PostMapping
-    public VolunteerSkillRecord addSkill(@RequestBody VolunteerSkillRequest request) {
+    public VolunteerSkillRecord addSkill(
+            @RequestBody VolunteerSkillRequest request) {
 
         VolunteerSkillRecord record = new VolunteerSkillRecord();
         record.setVolunteerId(request.getVolunteerId());
@@ -28,18 +30,10 @@ public class VolunteerSkillController {
         return service.saveSkill(record);
     }
 
-    @GetMapping("/volunteer/{id}")
-    public List<VolunteerSkillRecord> byVolunteer(@PathVariable Long id) {
-        return service.getSkillsByVolunteerId(id);
-    }
+    @GetMapping("/{volunteerId}")
+    public List<VolunteerSkillRecord> getByVolunteer(
+            @PathVariable Long volunteerId) {
 
-    @GetMapping("/name/{name}")
-    public List<VolunteerSkillRecord> bySkill(@PathVariable String name) {
-        return service.getSkillsByName(name);
-    }
-
-    @GetMapping
-    public List<VolunteerSkillRecord> all() {
-        return service.getAllSkills();
+        return service.getByVolunteer(volunteerId);
     }
 }
