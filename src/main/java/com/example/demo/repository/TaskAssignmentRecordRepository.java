@@ -1,19 +1,20 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.TaskAssignmentRecord;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 public interface TaskAssignmentRecordRepository {
 
-    boolean existsByTaskIdAndStatus(Long taskId, String status);
+    TaskAssignmentRecord save(TaskAssignmentRecord record);
 
     Optional<TaskAssignmentRecord> findById(Long id);
+
+    boolean existsByTaskIdAndStatus(Long taskId, String status);
 
     List<TaskAssignmentRecord> findByTaskId(Long taskId);
 
     List<TaskAssignmentRecord> findByVolunteerId(Long volunteerId);
 
     List<TaskAssignmentRecord> findAll();
-
-    TaskAssignmentRecord save(TaskAssignmentRecord record);
 }

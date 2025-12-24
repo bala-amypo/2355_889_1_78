@@ -5,30 +5,27 @@ import java.util.*;
 
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final Map<String, Map<String, Object>> store = new HashMap<>();
+    private final Map<String, Map<String, Object>> users = new HashMap<>();
     private long id = 1;
 
     public Map<String, Object> registerUser(String name, String email,
                                             String password, String role) {
-        Map<String, Object> user = new HashMap<>();
-        user.put("userId", id++);
-        user.put("email", email);
-        user.put("password", password);
-        user.put("role", role);
-        store.put(email, user);
-        return user;
+        Map<String, Object> u = new HashMap<>();
+        u.put("userId", id++);
+        u.put("email", email);
+        u.put("password", password);
+        u.put("role", role);
+        users.put(email, u);
+        return u;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username)
-            throws UsernameNotFoundException {
-
-        if (!store.containsKey(username))
+    public UserDetails loadUserByUsername(String username) {
+        if (!users.containsKey(username))
             throw new UsernameNotFoundException("User not found");
-
         return User.withUsername(username)
-                .password((String) store.get(username).get("password"))
-                .authorities("ROLE_" + store.get(username).get("role"))
+                .password("N/A")
+                .authorities(Collections.emptyList())
                 .build();
     }
 }
