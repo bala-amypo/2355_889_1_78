@@ -14,13 +14,11 @@ public class JwtTokenProvider {
     private String secretKey;
     private long validityInMilliseconds;
 
-    // ✅ REQUIRED constructor (TESTCASE EXPECTS THIS)
     public JwtTokenProvider(String secretKey, long validityInMilliseconds) {
         this.secretKey = secretKey;
         this.validityInMilliseconds = validityInMilliseconds;
     }
 
-    // ✅ REQUIRED by testcase
     public String generateToken(Authentication authentication,
                                 long userId,
                                 String username) {
@@ -29,17 +27,16 @@ public class JwtTokenProvider {
         claims.put("userId", userId);
 
         Date now = new Date();
-        Date validity = new Date(now.getTime() + validityInMilliseconds);
+        Date expiry = new Date(now.getTime() + validityInMilliseconds);
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(validity)
+                .setExpiration(expiry)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
 
-    // ✅ REQUIRED by testcase
     public Claims getAllClaims(String token) {
         return Jwts.parser()
                 .setSigningKey(secretKey)
@@ -47,7 +44,12 @@ public class JwtTokenProvider {
                 .getBody();
     }
 
-    // Optional but safe
+    // ✅ THIS WAS MISSING
+    public String getUsernameFromToken(String token) {
+        Claims claims = getAllClaims(token);
+        return claims.getSubject();
+    }
+
     public boolean validateToken(String token) {
         try {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
