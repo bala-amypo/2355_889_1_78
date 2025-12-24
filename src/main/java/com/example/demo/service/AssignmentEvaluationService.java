@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface AssignmentEvaluationService {
 
-    AssignmentEvaluationRecord evaluateAssignment(AssignmentEvaluationRecord eval);
+    AssignmentEvaluationRecord evaluateAssignment(AssignmentEvaluationRecord record);
 
     List<AssignmentEvaluationRecord> getEvaluationsByAssignment(Long assignmentId);
 }

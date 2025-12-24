@@ -1,7 +1,8 @@
 package com.example.demo.service;
 
 import com.example.demo.model.TaskRecord;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 public interface TaskRecordService {
 
@@ -9,9 +10,9 @@ public interface TaskRecordService {
 
     TaskRecord updateTask(Long id, TaskRecord task);
 
+    List<TaskRecord> getAllTasks();
+
     List<TaskRecord> getOpenTasks();
 
-    Optional<TaskRecord> getTaskByCode(String code);
-
-    List<TaskRecord> getAllTasks();
+    Optional<TaskRecord> getTaskByCode(String taskCode);
 }

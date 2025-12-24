@@ -4,21 +4,25 @@ import com.example.demo.model.VolunteerSkillRecord;
 import com.example.demo.repository.VolunteerSkillRecordRepository;
 import com.example.demo.service.VolunteerSkillService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class VolunteerSkillServiceImpl implements VolunteerSkillService {
 
-    private final VolunteerSkillRecordRepository repo;
+    private final VolunteerSkillRecordRepository repository;
 
-    public VolunteerSkillServiceImpl(VolunteerSkillRecordRepository repo) {
-        this.repo = repo;
+    public VolunteerSkillServiceImpl(VolunteerSkillRecordRepository repository) {
+        this.repository = repository;
     }
 
+    @Override
     public VolunteerSkillRecord addOrUpdateSkill(VolunteerSkillRecord skill) {
-        return repo.save(skill);
+        skill.setUpdatedAt(LocalDateTime.now());
+        return repository.save(skill);
     }
 
-    public List<VolunteerSkillRecord> getSkillsByVolunteer(Long id) {
-        return repo.findByVolunteerId(id);
+    @Override
+    public List<VolunteerSkillRecord> getSkillsByVolunteer(Long volunteerId) {
+        return repository.findByVolunteerId(volunteerId);
     }
 }
