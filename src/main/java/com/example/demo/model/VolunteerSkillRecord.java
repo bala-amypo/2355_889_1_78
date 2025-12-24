@@ -1,9 +1,9 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "volunteer_skill_record")
 public class VolunteerSkillRecord {
 
     @Id
@@ -15,23 +15,8 @@ public class VolunteerSkillRecord {
     private String skillLevel;
     private boolean certified;
 
-    private LocalDateTime updatedAt = LocalDateTime.now();
-
-    // ✅ Default constructor
     public VolunteerSkillRecord() {}
 
-    // ✅ Parameterized constructor
-    public VolunteerSkillRecord(Long id, Long volunteerId, String skillName,
-                                String skillLevel, boolean certified) {
-        this.id = id;
-        this.volunteerId = volunteerId;
-        this.skillName = skillName;
-        this.skillLevel = skillLevel;
-        this.certified = certified;
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    // ✅ Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -46,9 +31,4 @@ public class VolunteerSkillRecord {
 
     public boolean isCertified() { return certified; }
     public void setCertified(boolean certified) { this.certified = certified; }
-
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 }
