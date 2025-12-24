@@ -1,11 +1,11 @@
 package com.example.demo.repository;
 
-import com.example.demo.model.AssignmentEvaluationRecord;
+import com.example.demo.model.*;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-import java.util.List;
+import java.util.*;
 
 public interface AssignmentEvaluationRecordRepository
         extends JpaRepository<AssignmentEvaluationRecord, Long> {
+
     List<AssignmentEvaluationRecord> findByAssignmentId(Long assignmentId);
 }
