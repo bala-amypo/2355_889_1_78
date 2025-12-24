@@ -3,7 +3,6 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "volunteer_profile")
 public class VolunteerProfile {
 
     @Id
@@ -23,5 +22,38 @@ public class VolunteerProfile {
 
     private String availabilityStatus;
 
-    // getters & setters
+    // ✅ Default constructor
+    public VolunteerProfile() {}
+
+    // ✅ Parameterized constructor
+    public VolunteerProfile(Long id, String volunteerId, String fullName,
+                            String email, String phone, String availabilityStatus) {
+        this.id = id;
+        this.volunteerId = volunteerId;
+        this.fullName = fullName;
+        this.email = email;
+        this.phone = phone;
+        this.availabilityStatus = availabilityStatus;
+    }
+
+    // ✅ Getters & Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getVolunteerId() { return volunteerId; }
+    public void setVolunteerId(String volunteerId) { this.volunteerId = volunteerId; }
+
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
+
+    public String getAvailabilityStatus() { return availabilityStatus; }
+    public void setAvailabilityStatus(String availabilityStatus) {
+        this.availabilityStatus = availabilityStatus;
+    }
 }
