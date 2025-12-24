@@ -6,6 +6,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- Spring Boot Parent -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -13,16 +14,19 @@
         <relativePath/>
     </parent>
 
+    <!-- Project Info -->
     <groupId>com.example</groupId>
     <artifactId>volunteer-skill-matcher</artifactId>
     <version>1.0.0</version>
     <name>Volunteer Skill Matcher</name>
     <description>Volunteer Skill Matching System</description>
 
+    <!-- Java Version -->
     <properties>
         <java.version>17</java.version>
     </properties>
 
+    <!-- Dependencies -->
     <dependencies>
 
         <!-- Spring Boot Web -->
@@ -36,13 +40,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-		<dependency>
-    <groupId>org.testng</groupId>
-    <artifactId>testng</artifactId>
-    <version>7.8.0</version>
-    <scope>test</scope>
-   </dependency>
 
+        <!-- ✅ TestNG (IMPORTANT: compile scope) -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.8.0</version>
+            <scope>compile</scope>
+        </dependency>
 
         <!-- Spring Boot Security -->
         <dependency>
@@ -57,7 +62,7 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- ✅ JWT (ONLY ONE VERSION – 0.11.5) -->
+        <!-- JWT (ONLY ONE VERSION – 0.11.5) -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
@@ -78,7 +83,7 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Swagger -->
+        <!-- Swagger / OpenAPI -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -92,15 +97,16 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- Test -->
+        <!-- Spring Boot Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-		
+
     </dependencies>
 
+    <!-- Build -->
     <build>
         <plugins>
             <plugin>
