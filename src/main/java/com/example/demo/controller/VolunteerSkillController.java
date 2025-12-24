@@ -3,18 +3,11 @@ package com.example.demo.controller;
 import com.example.demo.dto.VolunteerSkillRequest;
 import com.example.demo.model.VolunteerSkillRecord;
 import com.example.demo.service.VolunteerSkillService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/skills")
-@SecurityRequirement(name = "bearerAuth")
-@Tag(name = "Volunteer Skills", description = "Volunteer skill management")
+@RequestMapping("/skills")
 public class VolunteerSkillController {
 
     private final VolunteerSkillService service;
@@ -24,29 +17,29 @@ public class VolunteerSkillController {
     }
 
     @PostMapping
-    @Operation(summary = "Add or update volunteer skill")
-    public ResponseEntity<VolunteerSkillRecord> addSkill(
-            @RequestBody VolunteerSkillRequest request) {
-        return ResponseEntity.ok(service.addOrUpdateSkill(request));
+    public VolunteerSkillRecord addSkill(@RequestBody VolunteerSkillRequest request) {
+
+        VolunteerSkillRecord record = new VolunteerSkillRecord();
+        record.setVolunteerId(request.getVolunteerId());
+        record.setSkillName(request.getSkillName());
+        record.setSkillLevel(request.getSkillLevel());
+        record.setCertified(request.isCertified());
+
+        return service.saveSkill(record);
     }
 
-    @GetMapping("/volunteer/{volunteerId}")
-    @Operation(summary = "Get skills by volunteer ID")
-    public ResponseEntity<List<VolunteerSkillRecord>> getSkillsByVolunteer(
-            @PathVariable Long volunteerId) {
-        return ResponseEntity.ok(service.getSkillsByVolunteerId(volunteerId));
+    @GetMapping("/volunteer/{id}")
+    public List<VolunteerSkillRecord> byVolunteer(@PathVariable Long id) {
+        return service.getSkillsByVolunteerId(id);
     }
 
-    @GetMapping("/name/{skillName}")
-    @Operation(summary = "Get skills by skill name")
-    public ResponseEntity<List<VolunteerSkillRecord>> getSkillsByName(
-            @PathVariable String skillName) {
-        return ResponseEntity.ok(service.getSkillsByName(skillName));
+    @GetMapping("/name/{name}")
+    public List<VolunteerSkillRecord> bySkill(@PathVariable String name) {
+        return service.getSkillsByName(name);
     }
 
     @GetMapping
-    @Operation(summary = "Get all skills")
-    public ResponseEntity<List<VolunteerSkillRecord>> getAllSkills() {
-        return ResponseEntity.ok(service.getAllSkills());
+    public List<VolunteerSkillRecord> all() {
+        return service.getAllSkills();
     }
 }

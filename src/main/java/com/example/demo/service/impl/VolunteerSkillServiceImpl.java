@@ -1,23 +1,37 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.service.VolunteerSkillService;
-import com.example.demo.repository.VolunteerSkillRecordRepository;
 import com.example.demo.model.VolunteerSkillRecord;
+import com.example.demo.repository.VolunteerSkillRepository;
+import com.example.demo.service.VolunteerSkillService;
+import org.springframework.stereotype.Service;
 import java.util.List;
 
+@Service
 public class VolunteerSkillServiceImpl implements VolunteerSkillService {
 
-    private final VolunteerSkillRecordRepository repo;
+    private final VolunteerSkillRepository repository;
 
-    public VolunteerSkillServiceImpl(VolunteerSkillRecordRepository repo) {
-        this.repo = repo;
+    public VolunteerSkillServiceImpl(VolunteerSkillRepository repository) {
+        this.repository = repository;
     }
 
-    public VolunteerSkillRecord addOrUpdateSkill(VolunteerSkillRecord s) {
-        return repo.save(s);
+    @Override
+    public VolunteerSkillRecord saveSkill(VolunteerSkillRecord record) {
+        return repository.save(record);
     }
 
-    public List<VolunteerSkillRecord> getSkillsByVolunteer(Long id) {
-        return repo.findByVolunteerId(id);
+    @Override
+    public List<VolunteerSkillRecord> getSkillsByVolunteerId(Long volunteerId) {
+        return repository.findByVolunteerId(volunteerId);
+    }
+
+    @Override
+    public List<VolunteerSkillRecord> getSkillsByName(String skillName) {
+        return repository.findBySkillName(skillName);
+    }
+
+    @Override
+    public List<VolunteerSkillRecord> getAllSkills() {
+        return repository.findAll();
     }
 }
