@@ -1,42 +1,15 @@
 package com.example.demo.model;
 
-import jakarta.persistence.*;
-
-@Entity
 public class VolunteerProfile {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(unique = true)
     private String volunteerId;
-
     private String fullName;
-
-    @Column(unique = true)
     private String email;
-
-    @Column(unique = true)
     private String phone;
-
     private String availabilityStatus;
 
-    // ✅ Default constructor
-    public VolunteerProfile() {}
-
-    // ✅ Parameterized constructor
-    public VolunteerProfile(Long id, String volunteerId, String fullName,
-                            String email, String phone, String availabilityStatus) {
-        this.id = id;
-        this.volunteerId = volunteerId;
-        this.fullName = fullName;
-        this.email = email;
-        this.phone = phone;
-        this.availabilityStatus = availabilityStatus;
-    }
-
-    // ✅ Getters & Setters
+    // getters & setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -53,7 +26,5 @@ public class VolunteerProfile {
     public void setPhone(String phone) { this.phone = phone; }
 
     public String getAvailabilityStatus() { return availabilityStatus; }
-    public void setAvailabilityStatus(String availabilityStatus) {
-        this.availabilityStatus = availabilityStatus;
-    }
+    public void setAvailabilityStatus(String availabilityStatus) { this.availabilityStatus = availabilityStatus; }
 }
