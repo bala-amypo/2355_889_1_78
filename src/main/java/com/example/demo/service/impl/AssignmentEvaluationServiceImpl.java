@@ -2,7 +2,6 @@ package com.example.demo.service.impl;
 
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.AssignmentEvaluationRecord;
-import com.example.demo.model.TaskAssignmentRecord;
 import com.example.demo.repository.AssignmentEvaluationRecordRepository;
 import com.example.demo.repository.TaskAssignmentRecordRepository;
 import com.example.demo.service.AssignmentEvaluationService;
@@ -15,26 +14,24 @@ public class AssignmentEvaluationServiceImpl implements AssignmentEvaluationServ
     private final TaskAssignmentRecordRepository assignmentRepo;
 
     public AssignmentEvaluationServiceImpl(
-            AssignmentEvaluationRecordRepository e,
-            TaskAssignmentRecordRepository a) {
-        this.evalRepo = e;
-        this.assignmentRepo = a;
+            AssignmentEvaluationRecordRepository evalRepo,
+            TaskAssignmentRecordRepository assignmentRepo) {
+        this.evalRepo = evalRepo;
+        this.assignmentRepo = assignmentRepo;
     }
 
-    public AssignmentEvaluationRecord evaluateAssignment(AssignmentEvaluationRecord eval) {
+    @Override
+    public AssignmentEvaluationRecord evaluateAssignment(
+            AssignmentEvaluationRecord record) {
 
-        TaskAssignmentRecord assignment =
-                assignmentRepo.findById(eval.getAssignmentId())
-                        .orElseThrow(() ->
-                                new BadRequestException("Assignment not found"));
+        assignmentRepo.findById(record.getAssignmentId())
+                .orElseThrow(() -> new BadRequestException("Assignment not found"));
 
-        if (!"COMPLETED".equals(assignment.getStatus()))
-            throw new BadRequestException("Assignment not completed");
-
-        return evalRepo.save(eval);
+        return evalRepo.save(record);
     }
 
-    public List<AssignmentEvaluationRecord> getEvaluationsByAssignment(Long id) {
-        return evalRepo.findByAssignmentId(id);
+    @Override
+    public List<AssignmentEvaluationRecord> getEvaluationsByAssignment(Long assignmentId) {
+        return evalRepo.findByAssignmentId(assignmentId);
     }
 }

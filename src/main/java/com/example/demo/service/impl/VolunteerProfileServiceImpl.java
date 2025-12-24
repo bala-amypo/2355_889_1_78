@@ -5,40 +5,45 @@ import com.example.demo.model.VolunteerProfile;
 import com.example.demo.repository.VolunteerProfileRepository;
 import com.example.demo.service.VolunteerProfileService;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 public class VolunteerProfileServiceImpl implements VolunteerProfileService {
 
-    private final VolunteerProfileRepository repo;
+    private final VolunteerProfileRepository repository;
 
-    public VolunteerProfileServiceImpl(VolunteerProfileRepository repo) {
-        this.repo = repo;
+    public VolunteerProfileServiceImpl(VolunteerProfileRepository repository) {
+        this.repository = repository;
     }
 
-    public VolunteerProfile createVolunteer(VolunteerProfile p) {
+    @Override
+    public VolunteerProfile createVolunteer(VolunteerProfile profile) {
 
-        if (repo.existsByVolunteerId(p.getVolunteerId()))
-            throw new BadRequestException("VolunteerId already exists");
-
-        if (repo.existsByEmail(p.getEmail()))
+        if (repository.existsByVolunteerId(profile.getVolunteerId())) {
+            throw new BadRequestException("Volunteer ID already exists");
+        }
+        if (repository.existsByEmail(profile.getEmail())) {
             throw new BadRequestException("Email already exists");
-
-        if (repo.existsByPhone(p.getPhone()))
+        }
+        if (repository.existsByPhone(profile.getPhone())) {
             throw new BadRequestException("Phone already exists");
-
-        return repo.save(p);
+        }
+        return repository.save(profile);
     }
 
+    @Override
     public VolunteerProfile getVolunteerById(Long id) {
-        return repo.findById(id)
+        return repository.findById(id)
                 .orElseThrow(() -> new BadRequestException("Volunteer not found"));
     }
 
+    @Override
     public List<VolunteerProfile> getAllVolunteers() {
-        return repo.findAll();
+        return repository.findAll();
     }
 
-    public Optional<VolunteerProfile> findByVolunteerId(String id) {
-        return repo.findByVolunteerId(id);
+    @Override
+    public Optional<VolunteerProfile> findByVolunteerId(String volunteerId) {
+        return repository.findByVolunteerId(volunteerId);
     }
 }

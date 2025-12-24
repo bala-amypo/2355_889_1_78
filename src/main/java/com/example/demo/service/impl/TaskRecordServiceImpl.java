@@ -1,48 +1,53 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.TaskRecord;
 import com.example.demo.repository.TaskRecordRepository;
 import com.example.demo.service.TaskRecordService;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 public class TaskRecordServiceImpl implements TaskRecordService {
 
-    private final TaskRecordRepository repo;
+    private final TaskRecordRepository repository;
 
-    public TaskRecordServiceImpl(TaskRecordRepository repo) {
-        this.repo = repo;
+    public TaskRecordServiceImpl(TaskRecordRepository repository) {
+        this.repository = repository;
     }
 
+    @Override
     public TaskRecord createTask(TaskRecord task) {
-        if (task.getStatus() == null)
+        if (task.getStatus() == null) {
             task.setStatus("OPEN");
-        return repo.save(task);
+        }
+        return repository.save(task);
     }
 
-    public TaskRecord updateTask(Long id, TaskRecord updated) {
-        TaskRecord existing = repo.findById(id)
-                .orElseThrow(() -> new BadRequestException("Task not found"));
+    @Override
+    public TaskRecord updateTask(Long id, TaskRecord task) {
+        TaskRecord existing = repository.findById(id).orElseThrow();
 
-        existing.setTaskName(updated.getTaskName());
-        existing.setRequiredSkill(updated.getRequiredSkill());
-        existing.setRequiredSkillLevel(updated.getRequiredSkillLevel());
-        existing.setPriority(updated.getPriority());
-        existing.setStatus(updated.getStatus());
+        existing.setTaskName(task.getTaskName());
+        existing.setRequiredSkill(task.getRequiredSkill());
+        existing.setRequiredSkillLevel(task.getRequiredSkillLevel());
+        existing.setPriority(task.getPriority());
+        existing.setStatus(task.getStatus());
 
-        return repo.save(existing);
+        return repository.save(existing);
     }
 
-    public List<TaskRecord> getOpenTasks() {
-        return repo.findByStatus("OPEN");
-    }
-
-    public Optional<TaskRecord> getTaskByCode(String code) {
-        return repo.findByTaskCode(code);
-    }
-
+    @Override
     public List<TaskRecord> getAllTasks() {
-        return repo.findAll();
+        return repository.findAll();
+    }
+
+    @Override
+    public List<TaskRecord> getOpenTasks() {
+        return repository.findByStatus("OPEN");
+    }
+
+    @Override
+    public Optional<TaskRecord> getTaskByCode(String taskCode) {
+        return repository.findByTaskCode(taskCode);
     }
 }
