@@ -3,6 +3,7 @@ package com.example.demo.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -10,34 +11,46 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    private final String SECRET_KEY = "mySecretKey12345";
-    private final long EXPIRATION_TIME = 86400000; // 1 day
+    private String secretKey;
+    private long validityInMilliseconds;
 
-    public String generateToken(String username) {
+    // ✅ REQUIRED constructor (TESTCASE EXPECTS THIS)
+    public JwtTokenProvider(String secretKey, long validityInMilliseconds) {
+        this.secretKey = secretKey;
+        this.validityInMilliseconds = validityInMilliseconds;
+    }
+
+    // ✅ REQUIRED by testcase
+    public String generateToken(Authentication authentication,
+                                long userId,
+                                String username) {
+
+        Claims claims = Jwts.claims().setSubject(username);
+        claims.put("userId", userId);
+
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + validityInMilliseconds);
 
         return Jwts.builder()
-                .setSubject(username)
-                .claim("username", username)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
 
-    public String getUsernameFromToken(String token) {
-
-        Claims claims = Jwts.parser()
-                .setSigningKey(SECRET_KEY)
+    // ✅ REQUIRED by testcase
+    public Claims getAllClaims(String token) {
+        return Jwts.parser()
+                .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody();
-
-        // ✅ FIXED LINE
-        return (String) claims.get("username");
     }
 
+    // Optional but safe
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return true;
         } catch (Exception e) {
             return false;
