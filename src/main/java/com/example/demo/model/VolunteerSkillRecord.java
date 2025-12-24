@@ -21,14 +21,22 @@ public class VolunteerSkillRecord {
     public void setId(Long id) { this.id = id; }
 
     public Long getVolunteerId() { return volunteerId; }
-    public void setVolunteerId(Long volunteerId) { this.volunteerId = volunteerId; }
+    public void setVolunteerId(Long volunteerId) {
+        this.volunteerId = volunteerId;
+    }
 
     public String getSkillName() { return skillName; }
-    public void setSkillName(String skillName) { this.skillName = skillName; }
+    public void setSkillName(String skillName) {
+        this.skillName = skillName;
+    }
 
     public String getSkillLevel() { return skillLevel; }
-    public void setSkillLevel(String skillLevel) { this.skillLevel = skillLevel; }
+    public void setSkillLevel(String skillLevel) {
+        this.skillLevel = skillLevel;
+    }
 
     public boolean isCertified() { return certified; }
-    public void setCertified(boolean certified) { this.certified = certified; }
+    public void setCertified(boolean certified) {
+        this.certified = certified;
+    }
 }
