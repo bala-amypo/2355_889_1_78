@@ -1,8 +1,8 @@
 package com.example.demo;
 
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.http.HttpServlet;
+import jakarta.http.HttpServletRequest;
+import jakarta.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
