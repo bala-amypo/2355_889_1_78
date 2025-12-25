@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JwtTokenProvider {
+
     private final String secret;
     private final long validityInMilliseconds;
 
@@ -19,6 +20,7 @@ public class JwtTokenProvider {
     }
 
     public String generateToken(Authentication authentication, Long userId, String role) {
+
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", userId);
         claims.put("role", role);
@@ -28,20 +30,29 @@ public class JwtTokenProvider {
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
         return Jwts.builder()
-                .setClaims(claims)
                 .setSubject(authentication.getName())
+                .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS512, secret)
+                // 🔑 HS256 WORKS WITH SHORT SECRET (IMPORTANT)
+                .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
 
     public String getUsernameFromToken(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 
     public Map<String, Object> getAllClaims(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+        Claims claims = Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(token)
+                .getBody();
+        return new HashMap<>(claims);
     }
 
     public boolean validateToken(String token) {
