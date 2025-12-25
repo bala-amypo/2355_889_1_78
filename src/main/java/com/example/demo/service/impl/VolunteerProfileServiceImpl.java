@@ -10,13 +10,12 @@ import java.util.Optional;
 
 @Service
 public class VolunteerProfileServiceImpl implements VolunteerProfileService {
-    
     private final VolunteerProfileRepository repository;
-    
+
     public VolunteerProfileServiceImpl(VolunteerProfileRepository repository) {
         this.repository = repository;
     }
-    
+
     @Override
     public VolunteerProfile createVolunteer(VolunteerProfile profile) {
         if (repository.existsByVolunteerId(profile.getVolunteerId())) {
@@ -30,20 +29,19 @@ public class VolunteerProfileServiceImpl implements VolunteerProfileService {
         }
         return repository.save(profile);
     }
-    
-    @Override
-    public VolunteerProfile getVolunteerById(Long id) {
-        return repository.findById(id)
-            .orElseThrow(() -> new BadRequestException("Volunteer not found"));
-    }
-    
-    @Override
-    public List<VolunteerProfile> getAllVolunteers() {
-        return repository.findAll();
-    }
-    
+
     @Override
     public Optional<VolunteerProfile> findByVolunteerId(String volunteerId) {
         return repository.findByVolunteerId(volunteerId);
+    }
+
+    @Override
+    public VolunteerProfile getVolunteerById(Long id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<VolunteerProfile> getAllVolunteers() {
+        return repository.findAll();
     }
 }
