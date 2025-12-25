@@ -45,8 +45,8 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>7.8.0</version>
-            <scope>compile</scope>
+            <version>7.9.0</version>
+            <scope>test</scope>
         </dependency>
 
         <!-- Spring Boot Security -->
