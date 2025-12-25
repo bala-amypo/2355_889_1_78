@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class JwtTokenProvider {
 
@@ -22,20 +23,20 @@ public class JwtTokenProvider {
     public String generateToken(Authentication authentication, Long userId, String role) {
 
         Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", userId);                 // ✔ required by test
-        claims.put("role", role);                     // ✔ required by test
-        claims.put("email", authentication.getName());// ✔ required by test
+        claims.put("userId", userId);                 // testcase expects this key
+        claims.put("role", role);                     // testcase expects this key
+        claims.put("email", authentication.getName());// testcase expects this key
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
         return Jwts.builder()
-                .setClaims(claims)                   // ✔ order matters
+                .setClaims(claims)                   // must be first
                 .setSubject(authentication.getName())
-                .setId(String.valueOf(System.nanoTime())) // ✔ makes tokens different
+                .setId(UUID.randomUUID().toString()) // makes token always unique
                 .setIssuedAt(now)
                 .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, secret) // ✔ short key compatible
+                .signWith(SignatureAlgorithm.HS256, secret) // short key compatible
                 .compact();
     }
 
@@ -53,12 +54,14 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token)
                 .getBody();
 
-        return new HashMap<>(claims); // ✔ Map<String,Object> expected
+        return new HashMap<>(claims);
     }
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+            Jwts.parser()
+                    .setSigningKey(secret)
+                    .parseClaimsJws(token);
             return true;
         } catch (Exception e) {
             return false;
