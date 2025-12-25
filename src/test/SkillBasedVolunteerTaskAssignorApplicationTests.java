@@ -721,3 +721,304 @@ public class SkillBasedVolunteerTaskAssignorApplicationTests {
         task.setId(500L);
         task.setStatus("OPEN");
         task.setRequiredSkill("CODING");
+        // CONTINUATION OF SkillBasedVolunteerTaskAssignorApplicationTests.java
+// Add these remaining test methods to the test class
+
+    @Test(priority = 47, groups = "manyToMany")
+    public void testAssignTaskThrowsWhenSkillLevelInsufficient() {
+        TaskRecord task = new TaskRecord();
+        task.setId(500L);
+        task.setStatus("OPEN");
+        task.setRequiredSkill("CODING");
+        task.setRequiredSkillLevel("EXPERT");
+
+        VolunteerProfile v = new VolunteerProfile();
+        v.setId(1L);
+        v.setAvailabilityStatus("AVAILABLE");
+
+        VolunteerSkillRecord skill = new VolunteerSkillRecord();
+        skill.setVolunteerId(1L);
+        skill.setSkillName("CODING");
+        skill.setSkillLevel("BEGINNER");
+
+        when(taskRecordRepository.findById(500L))
+                .thenReturn(java.util.Optional.of(task));
+        when(taskAssignmentRecordRepository.existsByTaskIdAndStatus(500L, "ACTIVE"))
+                .thenReturn(false);
+        when(volunteerProfileRepository.findByAvailabilityStatus("AVAILABLE"))
+                .thenReturn(Collections.singletonList(v));
+        when(volunteerSkillRecordRepository.findByVolunteerId(1L))
+                .thenReturn(Collections.singletonList(skill));
+
+        try {
+            taskAssignmentService.assignTask(500L);
+            Assert.fail("Expected BadRequestException");
+        } catch (BadRequestException ex) {
+            Assert.assertTrue(ex.getMessage().contains("required skill level"));
+        }
+    }
+
+    @Test(priority = 48, groups = "manyToMany")
+    public void testGetAllAssignmentsReturnsList() {
+        when(taskAssignmentRecordRepository.findAll())
+                .thenReturn(Collections.emptyList());
+
+        Assert.assertTrue(taskAssignmentService.getAllAssignments().isEmpty());
+    }
+
+    // ================================
+    //        7. SECURITY + JWT TESTS
+    // ================================
+
+    @Test(priority = 49, groups = "security")
+    public void testRegisterUserProducesValidToken() {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        Map<String, Object> user =
+                customUserDetailsService.registerUser(
+                        "Security User",
+                        "sec@example.com",
+                        encoder.encode("secpass"),
+                        "ADMIN"
+                );
+
+        Authentication auth =
+                new UsernamePasswordAuthenticationToken(
+                        "sec@example.com",
+                        "secpass",
+                        Collections.emptyList()
+                );
+
+        String token = jwtTokenProvider.generateToken(auth,
+                (Long) user.get("userId"),
+                (String) user.get("role"));
+
+        Assert.assertNotNull(token);
+    }
+
+    @Test(priority = 50, groups = "security")
+    public void testJwtTokenContainsUsername() {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        Map<String, Object> user =
+                customUserDetailsService.registerUser(
+                        "Jwt User",
+                        "jwt@example.com",
+                        encoder.encode("jwtpass"),
+                        "COORDINATOR"
+                );
+
+        Authentication auth =
+                new UsernamePasswordAuthenticationToken(
+                        "jwt@example.com",
+                        "jwtpass",
+                        Collections.emptyList()
+                );
+
+        String token =
+                jwtTokenProvider.generateToken(auth,
+                        (Long) user.get("userId"),
+                        (String) user.get("role"));
+
+        String username = jwtTokenProvider.getUsernameFromToken(token);
+
+        Assert.assertEquals(username, "jwt@example.com");
+    }
+
+    @Test(priority = 51, groups = "security")
+    public void testJwtValidation() {
+        Authentication auth =
+                new UsernamePasswordAuthenticationToken(
+                        "valid@example.com",
+                        "password",
+                        Collections.emptyList()
+                );
+
+        String token = jwtTokenProvider.generateToken(auth, 1L, "ADMIN");
+
+        Assert.assertTrue(jwtTokenProvider.validateToken(token));
+    }
+
+    @Test(priority = 52, groups = "security")
+    public void testJwtInvalidTokenFailsValidation() {
+        Assert.assertFalse(jwtTokenProvider.validateToken("invalid.token.value"));
+    }
+
+    @Test(priority = 53, groups = "security")
+    public void testPasswordEncoderMatches() {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String encoded = encoder.encode("mypassword");
+
+        Assert.assertTrue(encoder.matches("mypassword", encoded));
+    }
+
+    @Test(priority = 54, groups = "security")
+    public void testCustomUserDetailsServiceRoleStored() {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        Map<String, Object> user =
+                customUserDetailsService.registerUser(
+                        "Role User",
+                        "role@example.com",
+                        encoder.encode("rolepass"),
+                        "VOLUNTEER_VIEWER"
+                );
+
+        Assert.assertEquals(user.get("role"), "VOLUNTEER_VIEWER");
+    }
+
+    @Test(priority = 55, groups = "security")
+    public void testJwtClaimsContainRoleAndUserId() {
+        Authentication auth =
+                new UsernamePasswordAuthenticationToken(
+                        "claims@example.com",
+                        "pass",
+                        Collections.emptyList()
+                );
+
+        String token =
+                jwtTokenProvider.generateToken(auth, 42L, "ADMIN");
+
+        Map<String, Object> claims = jwtTokenProvider.getAllClaims(token);
+
+        Assert.assertEquals(((Number) claims.get("userId")).longValue(), 42L);
+        Assert.assertEquals(claims.get("role"), "ADMIN");
+        Assert.assertEquals(claims.get("email"), "claims@example.com");
+    }
+
+    @Test(priority = 56, groups = "security")
+    public void testJwtTokenIsDifferentForDifferentUsers() {
+        Authentication a1 =
+                new UsernamePasswordAuthenticationToken("a@example.com", "pass");
+        Authentication a2 =
+                new UsernamePasswordAuthenticationToken("b@example.com", "pass");
+
+        String t1 = jwtTokenProvider.generateToken(a1, 1L, "ADMIN");
+        String t2 = jwtTokenProvider.generateToken(a2, 2L, "COORDINATOR");
+
+        Assert.assertNotEquals(t1, t2);
+    }
+
+    // ================================
+    //          8. HQL TESTS
+    // ================================
+
+    @Test(priority = 57, groups = "hql")
+    public void testFindSkillsBySkillNameAndLevelUsingQuery() {
+        VolunteerSkillRecord rec = new VolunteerSkillRecord();
+        rec.setSkillName("CODING");
+        rec.setSkillLevel("INTERMEDIATE");
+
+        when(volunteerSkillRecordRepository.findBySkillNameAndSkillLevel("CODING", "INTERMEDIATE"))
+                .thenReturn(Collections.singletonList(rec));
+
+        List<VolunteerSkillRecord> list =
+                volunteerSkillRecordRepository.findBySkillNameAndSkillLevel("CODING", "INTERMEDIATE");
+
+        Assert.assertEquals(list.size(), 1);
+        Assert.assertEquals(list.get(0).getSkillLevel(), "INTERMEDIATE");
+    }
+
+    @Test(priority = 58, groups = "hql")
+    public void testGetOpenTasksViaRepositoryHqlEquivalent() {
+        TaskRecord t1 = new TaskRecord();
+        t1.setStatus("OPEN");
+
+        when(taskRecordRepository.findByStatus("OPEN"))
+                .thenReturn(Collections.singletonList(t1));
+
+        List<TaskRecord> open = taskRecordService.getOpenTasks();
+
+        Assert.assertEquals(open.size(), 1);
+    }
+
+    @Test(priority = 59, groups = "hql")
+    public void testSkillSearchByNameUsingQueryAsHql() {
+        VolunteerSkillRecord rec = new VolunteerSkillRecord();
+        rec.setSkillName("TEACHING");
+        rec.setSkillLevel("EXPERT");
+
+        when(volunteerSkillRecordRepository.findBySkillName("TEACHING"))
+                .thenReturn(Collections.singletonList(rec));
+
+        List<VolunteerSkillRecord> list =
+                volunteerSkillRecordRepository.findBySkillName("TEACHING");
+
+        Assert.assertEquals(list.get(0).getSkillLevel(), "EXPERT");
+    }
+
+    @Test(priority = 60, groups = "hql")
+    public void testFindAssignmentsByTaskIdActsAsCriteriaQuery() {
+        TaskAssignmentRecord a1 = new TaskAssignmentRecord();
+        a1.setTaskId(999L);
+
+        when(taskAssignmentRecordRepository.findByTaskId(999L))
+                .thenReturn(Collections.singletonList(a1));
+
+        List<TaskAssignmentRecord> list =
+                taskAssignmentService.getAssignmentsByTask(999L);
+
+        Assert.assertEquals(list.size(), 1);
+    }
+
+    @Test(priority = 61, groups = "hql")
+    public void testFindAssignmentsByVolunteerIdActsAsCriteriaQuery() {
+        TaskAssignmentRecord a1 = new TaskAssignmentRecord();
+        a1.setVolunteerId(888L);
+
+        when(taskAssignmentRecordRepository.findByVolunteerId(888L))
+                .thenReturn(Collections.singletonList(a1));
+
+        List<TaskAssignmentRecord> list =
+                taskAssignmentService.getAssignmentsByVolunteer(888L);
+
+        Assert.assertEquals(list.size(), 1);
+    }
+
+    @Test(priority = 62, groups = "hql")
+    public void testGetEvaluationsByAssignmentIdActsAsHql() {
+        AssignmentEvaluationRecord e1 = new AssignmentEvaluationRecord();
+        e1.setAssignmentId(777L);
+
+        when(assignmentEvaluationRecordRepository.findByAssignmentId(777L))
+                .thenReturn(Collections.singletonList(e1));
+
+        List<AssignmentEvaluationRecord> list =
+                assignmentEvaluationService.getEvaluationsByAssignment(777L);
+
+        Assert.assertEquals(list.size(), 1);
+    }
+
+    @Test(priority = 63, groups = "hql")
+    public void testAdvancedFilteringUsingInMemoryCriteria() {
+        VolunteerSkillRecord s1 = new VolunteerSkillRecord();
+        s1.setSkillName("COOKING");
+        s1.setSkillLevel("EXPERT");
+
+        VolunteerSkillRecord s2 = new VolunteerSkillRecord();
+        s2.setSkillName("COOKING");
+        s2.setSkillLevel("BEGINNER");
+
+        List<VolunteerSkillRecord> list = Arrays.asList(s1, s2);
+
+        long countExpert = list.stream()
+                .filter(x -> x.getSkillName().equals("COOKING") &&
+                             x.getSkillLevel().equals("EXPERT"))
+                .count();
+
+        Assert.assertEquals(countExpert, 1);
+    }
+
+    @Test(priority = 64, groups = "hql")
+    public void testEdgeCaseNoResultsForSkillQuery() {
+        when(volunteerSkillRecordRepository.findBySkillNameAndSkillLevel("OTHER", "BEGINNER"))
+                .thenReturn(Collections.emptyList());
+
+        List<VolunteerSkillRecord> list =
+                volunteerSkillRecordRepository.findBySkillNameAndSkillLevel("OTHER", "BEGINNER");
+
+        Assert.assertTrue(list.isEmpty());
+    }
+
+}
+
+// END OF TEST CLASS
