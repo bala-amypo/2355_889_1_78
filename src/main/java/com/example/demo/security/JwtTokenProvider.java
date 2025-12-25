@@ -22,20 +22,20 @@ public class JwtTokenProvider {
     public String generateToken(Authentication authentication, Long userId, String role) {
 
         Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", userId);
-        claims.put("role", role);
-        claims.put("email", authentication.getName());
+        claims.put("userId", userId);                 // ✔ required by test
+        claims.put("role", role);                     // ✔ required by test
+        claims.put("email", authentication.getName());// ✔ required by test
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
         return Jwts.builder()
+                .setClaims(claims)                   // ✔ order matters
                 .setSubject(authentication.getName())
-                .setClaims(claims)
+                .setId(String.valueOf(System.nanoTime())) // ✔ makes tokens different
                 .setIssuedAt(now)
                 .setExpiration(validity)
-                // 🔑 HS256 WORKS WITH SHORT SECRET (IMPORTANT)
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .signWith(SignatureAlgorithm.HS256, secret) // ✔ short key compatible
                 .compact();
     }
 
@@ -52,7 +52,8 @@ public class JwtTokenProvider {
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody();
-        return new HashMap<>(claims);
+
+        return new HashMap<>(claims); // ✔ Map<String,Object> expected
     }
 
     public boolean validateToken(String token) {
