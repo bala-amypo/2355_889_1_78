@@ -6,8 +6,8 @@ import java.util.Optional;
 
 public interface TaskRecordService {
     TaskRecord createTask(TaskRecord task);
-    TaskRecord updateTask(Long id, TaskRecord task);
-    List<TaskRecord> getAllTasks();
+    TaskRecord updateTask(Long id, TaskRecord updated);
     List<TaskRecord> getOpenTasks();
-    Optional<TaskRecord> getTaskByCode(String taskCode);
+    List<TaskRecord> getAllTasks();
+    Optional<TaskRecord> getTaskByCode(String code);
 }
