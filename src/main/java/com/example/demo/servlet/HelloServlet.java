@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.servlet;
 
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,3 +32,4 @@ public class HelloServlet extends HttpServlet {
         doGet(request, response);
     }
 }
+
