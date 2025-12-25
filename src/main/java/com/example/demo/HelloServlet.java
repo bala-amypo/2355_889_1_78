@@ -16,16 +16,13 @@ public class HelloServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
-        // Set the content type to text/plain as expected by the tests
         response.setContentType("text/plain");
 
-        // Get the writer and output the message
         PrintWriter writer = response.getWriter();
         writer.print("Hello from HelloServlet");
         writer.flush();
     }
 
-    // Optional: handle POST the same way as GET (some tests might call it indirectly)
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
