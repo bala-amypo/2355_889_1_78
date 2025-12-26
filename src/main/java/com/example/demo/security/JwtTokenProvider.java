@@ -3,7 +3,6 @@ package com.example.demo.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.SignatureException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -14,11 +13,12 @@ import java.util.Map;
 @Component
 public class JwtTokenProvider {
 
-    private final String secret = "VerySecretKeyForJwtDemoApplication123456";
-    private final long expiration = 3600000L;
+    private String secret;
+    private long expiration;
 
     public JwtTokenProvider() {
-        // Default constructor with hardcoded values to match test
+        this.secret = "VerySecretKeyForJwtDemoApplication123456";
+        this.expiration = 3600000L;
     }
 
     public JwtTokenProvider(String secret, long expiration) {
