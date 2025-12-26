@@ -1,6 +1,10 @@
 package com.example.demo.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
@@ -12,11 +16,22 @@ public class User {
 
     private String username;
     private String password;
-    private String email;
+    private String email; // make sure this field exists
     private String role;
 
-    // ---- getters & setters ----
+    // Default constructor
+    public User() {
+    }
 
+    // Constructor with fields
+    public User(String username, String password, String email, String role) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+    }
+
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -41,12 +56,11 @@ public class User {
         this.password = password;
     }
 
-    // ✅ ADD THIS
     public String getEmail() {
         return email;
     }
 
-    // ✅ ADD THIS
+    // THIS IS THE METHOD YOUR ERROR MENTIONED
     public void setEmail(String email) {
         this.email = email;
     }
@@ -57,5 +71,16 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    // Optional: toString
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                '}';
     }
 }
