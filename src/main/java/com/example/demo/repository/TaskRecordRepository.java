@@ -1,4 +1,3 @@
-// src/main/java/com/example/demo/repository/TaskRecordRepository.java
 package com.example.demo.repository;
 
 import com.example.demo.model.TaskRecord;
@@ -8,6 +7,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TaskRecordRepository extends JpaRepository<TaskRecord, Long> {
+
+    boolean existsByTaskCode(String taskCode);
+
     Optional<TaskRecord> findByTaskCode(String taskCode);
+
     List<TaskRecord> findByStatus(String status);
 }
