@@ -13,8 +13,20 @@ import java.util.Map;
 @Component
 public class JwtTokenProvider {
 
-    private final String secret = "VerySecretKeyForJwtDemoApplication123456";
-    private final long expiration = 3600000L;
+    private final String secret;
+    private final long expiration;
+
+    // No-arg constructor for Spring Boot (uses hardcoded defaults)
+    public JwtTokenProvider() {
+        this.secret = "VerySecretKeyForJwtDemoApplication123456";
+        this.expiration = 3600000L;
+    }
+
+    // Parameterized constructor for tests
+    public JwtTokenProvider(String secret, long expiration) {
+        this.secret = secret;
+        this.expiration = expiration;
+    }
 
     public String generateToken(Authentication authentication, Long userId, String role) {
         Map<String, Object> claims = new HashMap<>();
