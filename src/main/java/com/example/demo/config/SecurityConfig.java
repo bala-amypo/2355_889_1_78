@@ -16,42 +16,48 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-            // CSRF disable (Swagger + POST requests ku thevai)
+            // ❌ CSRF disabled (Swagger + POST ku)
             .csrf(csrf -> csrf.disable())
 
             .authorizeHttpRequests(auth -> auth
 
-                // ✅ HelloServlet (tests + servlet access)
+                // ✅ OLD CODE – DO NOT CHANGE
                 .requestMatchers("/hello", "/hello/**").permitAll()
 
-                // ✅ Task APIs (Swagger-la POST /tasks 403 poganum na)
+                // ✅ OLD CODE – Task APIs
                 .requestMatchers("/tasks", "/tasks/**").permitAll()
 
-                // ✅ Swagger UI
+                // ✅ OLD CODE – Swagger
                 .requestMatchers(
                         "/swagger-ui/**",
                         "/v3/api-docs/**",
                         "/swagger-ui.html"
                 ).permitAll()
 
-                // ✅ Authentication APIs
+                // ✅ OLD CODE – Auth
                 .requestMatchers("/auth/**").permitAll()
 
-                // ❌ Remaining ellam secured
+                // 🔥 EXTRA CODE – ONLY ADDITION
+                .requestMatchers("/volunteers", "/volunteers/**").permitAll()
+                .requestMatchers("/skills", "/skills/**").permitAll()
+                .requestMatchers("/assignments", "/assignments/**").permitAll()
+                .requestMatchers("/evaluations", "/evaluations/**").permitAll()
+
+                // 🔒 Remaining secured
                 .anyRequest().authenticated()
             );
 
         return http.build();
     }
 
-    // ✅ AuthenticationManager bean (Spring Boot 3 ku mandatory)
+    // ✅ OLD CODE – AuthenticationManager
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    // ✅ Password encoder
+    // ✅ OLD CODE – Password Encoder
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
