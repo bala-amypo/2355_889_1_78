@@ -16,13 +16,11 @@ public class JwtTokenProvider {
     private final String secret;
     private final long expiration;
 
-    // No-arg constructor for Spring Boot (uses hardcoded defaults)
     public JwtTokenProvider() {
         this.secret = "VerySecretKeyForJwtDemoApplication123456";
         this.expiration = 3600000L;
     }
 
-    // Parameterized constructor for tests
     public JwtTokenProvider(String secret, long expiration) {
         this.secret = secret;
         this.expiration = expiration;
@@ -65,6 +63,8 @@ public class JwtTokenProvider {
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody();
-        return new HashMap<>(claims);
+        Map<String, Object> map = new HashMap<>();
+        claims.forEach(map::put);
+        return map;
     }
 }
