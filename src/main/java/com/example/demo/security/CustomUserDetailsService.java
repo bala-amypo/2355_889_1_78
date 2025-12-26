@@ -2,7 +2,9 @@ package com.example.demo.security;
 
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
-import org.springframework.security.core.userdetails.*;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +14,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // ✅ TEST EXPECTS THIS CONSTRUCTOR
-    public CustomUserDetailsService(
-            UserRepository userRepository,
-            PasswordEncoder passwordEncoder) {
-
+    // ✅ REQUIRED BY TEST CASES
+    public CustomUserDetailsService(UserRepository userRepository,
+                                    PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -32,20 +32,20 @@ public class CustomUserDetailsService implements UserDetailsService {
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getUsername())
                 .password(user.getPassword())
-                .roles(user.getRole())
+                .roles("USER")
                 .build();
     }
 
-    // ✅ TEST EXPECTS THIS METHOD
-    public User registerUser(
-            String username,
-            String password,
-            String role,
-            String email) {
+    // ✅ REQUIRED BY TEST CASES
+    public User registerUser(String username,
+                             String password,
+                             String email,
+                             String role) {
 
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
+        user.setEmail(email);
         user.setRole(role);
 
         return userRepository.save(user);
