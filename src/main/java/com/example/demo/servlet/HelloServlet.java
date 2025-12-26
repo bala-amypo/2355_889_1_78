@@ -1,24 +1,22 @@
-package com.example.demo.util;
+package com.example.demo.servlet;
 
-public class SkillLevelUtil {
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-    public static int levelRank(String level) {
-        if (level == null) return 0;
-        return switch (level.toUpperCase()) {
-            case "BEGINNER" -> 1;
-            case "INTERMEDIATE" -> 2;
-            case "EXPERT" -> 3;
-            default -> 0;
-        };
-    }
+import java.io.IOException;
+import java.io.PrintWriter;
 
-    public static int priorityRank(String priority) {
-        if (priority == null) return 0;
-        return switch (priority.toUpperCase()) {
-            case "LOW" -> 1;
-            case "MEDIUM" -> 2;
-            case "HIGH" -> 3;
-            default -> 0;
-        };
+public class HelloServlet extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+
+        resp.setContentType("text/plain");
+        PrintWriter out = resp.getWriter();
+        out.print("Hello from Servlet");
+        out.flush();
     }
 }
