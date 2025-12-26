@@ -53,13 +53,11 @@ public class JwtTokenProvider {
         }
     }
 
-    public Map<String, Object> getAllClaims(String token) {
-        Claims claims = Jwts.parserBuilder()
+    public Claims getAllClaims(String token) {
+        return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-
-        return new HashMap<>(claims);
     }
 }
