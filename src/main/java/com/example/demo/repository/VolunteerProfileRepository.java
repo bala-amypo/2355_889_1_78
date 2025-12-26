@@ -1,16 +1,15 @@
-// src/main/java/com/example/demo/repository/VolunteerProfileRepository.java
-package com.example.demo.repository;
+// src/main/java/com/example/demo/service/VolunteerProfileService.java
+package com.example.demo.service;
 
 import com.example.demo.model.VolunteerProfile;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface VolunteerProfileRepository extends JpaRepository<VolunteerProfile, Long> {
-    boolean existsByVolunteerId(String volunteerId);
-    boolean existsByEmail(String email);
-    boolean existsByPhone(String phone);
+public interface VolunteerProfileService {
+    VolunteerProfile createVolunteer(VolunteerProfile profile);
+    VolunteerProfile getVolunteerById(Long id);
+    List<VolunteerProfile> getAllVolunteers();
     Optional<VolunteerProfile> findByVolunteerId(String volunteerId);
-    List<VolunteerProfile> findByAvailabilityStatus(String availabilityStatus);
+    void updateAvailability(Long id, String status);
 }

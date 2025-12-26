@@ -1,9 +1,12 @@
+// src/main/java/com/example/demo/service/AssignmentEvaluationService.java
 package com.example.demo.service;
 
 import com.example.demo.model.AssignmentEvaluationRecord;
+
 import java.util.List;
 
 public interface AssignmentEvaluationService {
-    AssignmentEvaluationRecord evaluateAssignment(AssignmentEvaluationRecord eval);
+    AssignmentEvaluationRecord evaluateAssignment(AssignmentEvaluationRecord evaluation);
     List<AssignmentEvaluationRecord> getEvaluationsByAssignment(Long assignmentId);
+    List<AssignmentEvaluationRecord> getAllEvaluations();
 }

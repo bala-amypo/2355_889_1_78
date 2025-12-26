@@ -1,6 +1,8 @@
+// src/main/java/com/example/demo/service/TaskAssignmentService.java
 package com.example.demo.service;
 
 import com.example.demo.model.TaskAssignmentRecord;
+
 import java.util.List;
 
 public interface TaskAssignmentService {
@@ -8,4 +10,5 @@ public interface TaskAssignmentService {
     List<TaskAssignmentRecord> getAssignmentsByTask(Long taskId);
     List<TaskAssignmentRecord> getAssignmentsByVolunteer(Long volunteerId);
     List<TaskAssignmentRecord> getAllAssignments();
+    void updateStatus(Long id, String status);
 }
