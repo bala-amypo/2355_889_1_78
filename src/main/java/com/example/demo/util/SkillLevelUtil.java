@@ -1,6 +1,8 @@
+// src/main/java/com/example/demo/util/SkillLevelUtil.java
 package com.example.demo.util;
 
 public class SkillLevelUtil {
+
     public static int levelRank(String level) {
         return switch (level) {
             case "BEGINNER" -> 1;
