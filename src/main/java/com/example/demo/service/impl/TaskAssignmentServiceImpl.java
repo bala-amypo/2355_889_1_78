@@ -12,10 +12,11 @@ import com.example.demo.repository.VolunteerProfileRepository;
 import com.example.demo.repository.VolunteerSkillRecordRepository;
 import com.example.demo.service.TaskAssignmentService;
 import com.example.demo.util.SkillLevelUtil;
+import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
-
+@Service
 public class TaskAssignmentServiceImpl implements TaskAssignmentService {
 
     private final TaskAssignmentRecordRepository assignmentRepo;
