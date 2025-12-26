@@ -1,51 +1,41 @@
-// src/main/java/com/example/demo/controller/VolunteerProfileController.java
 package com.example.demo.controller;
 
 import com.example.demo.model.VolunteerProfile;
 import com.example.demo.service.VolunteerProfileService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
-@RequestMapping("/api/volunteers")
-@Tag(name = "VolunteerProfileController")
+@RequestMapping("/volunteers")
 public class VolunteerProfileController {
 
-    @Autowired
-    private VolunteerProfileService service;
+    private final VolunteerProfileService service;
 
-    @PostMapping("/")
-    @Operation(summary = "Create volunteer")
+    public VolunteerProfileController(VolunteerProfileService service) {
+        this.service = service;
+    }
+
+    @PostMapping
     public VolunteerProfile create(@RequestBody VolunteerProfile profile) {
         return service.createVolunteer(profile);
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Get volunteer")
     public VolunteerProfile get(@PathVariable Long id) {
         return service.getVolunteerById(id);
     }
 
-    @GetMapping("/")
-    @Operation(summary = "List all")
-    public List<VolunteerProfile> list() {
+    @GetMapping
+    public List<VolunteerProfile> all() {
         return service.getAllVolunteers();
     }
 
     @PutMapping("/{id}/availability")
-    @Operation(summary = "Update status")
-    public void updateAvailability(@PathVariable Long id, @RequestBody Map<String, String> body) {
-        service.updateAvailability(id, body.get("status"));
-    }
+    public VolunteerProfile updateAvailability(
+            @PathVariable Long id,
+            @RequestParam String status) {
 
-    @GetMapping("/lookup/{volunteerId}")
-    @Operation(summary = "Lookup by ID")
-    public VolunteerProfile lookup(@PathVariable String volunteerId) {
-        return service.findByVolunteerId(volunteerId).orElseThrow();
+        return service.updateAvailability(id, status);
     }
 }
