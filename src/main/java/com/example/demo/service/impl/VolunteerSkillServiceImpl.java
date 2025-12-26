@@ -1,14 +1,12 @@
-// src/main/java/com/example/demo/service/impl/VolunteerSkillServiceImpl.java
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.VolunteerSkillRecord;
 import com.example.demo.repository.VolunteerSkillRecordRepository;
 import com.example.demo.service.VolunteerSkillService;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public class VolunteerSkillServiceImpl implements VolunteerSkillService {
 
     private final VolunteerSkillRecordRepository repository;
@@ -29,7 +27,8 @@ public class VolunteerSkillServiceImpl implements VolunteerSkillService {
 
     @Override
     public VolunteerSkillRecord getSkillById(Long id) {
-        return repository.findById(id).orElseThrow();
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Skill not found"));
     }
 
     @Override

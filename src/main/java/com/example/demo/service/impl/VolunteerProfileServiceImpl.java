@@ -1,15 +1,14 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.VolunteerProfile;
 import com.example.demo.repository.VolunteerProfileRepository;
 import com.example.demo.service.VolunteerProfileService;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
 public class VolunteerProfileServiceImpl implements VolunteerProfileService {
 
     private final VolunteerProfileRepository repository;
@@ -20,21 +19,23 @@ public class VolunteerProfileServiceImpl implements VolunteerProfileService {
 
     @Override
     public VolunteerProfile createVolunteer(VolunteerProfile profile) {
-        if (repository.existsByVolunteerId(profile.getVolunteerId())) {
+
+        if (repository.existsByVolunteerId(profile.getVolunteerId()))
             throw new BadRequestException("VolunteerId already exists");
-        }
-        if (repository.existsByEmail(profile.getEmail())) {
+
+        if (repository.existsByEmail(profile.getEmail()))
             throw new BadRequestException("Email already exists");
-        }
-        if (repository.existsByPhone(profile.getPhone())) {
+
+        if (repository.existsByPhone(profile.getPhone()))
             throw new BadRequestException("Phone already exists");
-        }
+
         return repository.save(profile);
     }
 
     @Override
     public VolunteerProfile getVolunteerById(Long id) {
-        return repository.findById(id).orElseThrow();
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Volunteer not found"));
     }
 
     @Override
@@ -48,9 +49,9 @@ public class VolunteerProfileServiceImpl implements VolunteerProfileService {
     }
 
     @Override
-    public void updateAvailability(Long id, String status) {
-        VolunteerProfile profile = getVolunteerById(id);
-        profile.setAvailabilityStatus(status);
-        repository.save(profile);
+    public VolunteerProfile updateAvailability(Long id, String availabilityStatus) {
+        VolunteerProfile v = getVolunteerById(id);
+        v.setAvailabilityStatus(availabilityStatus);
+        return repository.save(v);
     }
 }

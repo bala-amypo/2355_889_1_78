@@ -6,9 +6,14 @@ import java.util.List;
 import java.util.Optional;
 
 public interface VolunteerProfileService {
+
     VolunteerProfile createVolunteer(VolunteerProfile profile);
+
     VolunteerProfile getVolunteerById(Long id);
+
     List<VolunteerProfile> getAllVolunteers();
+
     Optional<VolunteerProfile> findByVolunteerId(String volunteerId);
-    void updateAvailability(Long id, String status);  // <-- ADD THIS METHOD
+
+    VolunteerProfile updateAvailability(Long id, String availabilityStatus);
 }
