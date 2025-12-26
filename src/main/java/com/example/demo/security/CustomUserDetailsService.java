@@ -9,7 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
-@Component
+
 public class CustomUserDetailsService implements UserDetailsService {
     private final Map<String, Map<String, Object>> users = new HashMap<>();
     private final AtomicLong idGenerator = new AtomicLong(1);
