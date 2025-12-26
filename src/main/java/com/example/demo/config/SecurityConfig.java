@@ -16,32 +16,42 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+            // CSRF disable (Swagger + POST requests ku thevai)
             .csrf(csrf -> csrf.disable())
+
             .authorizeHttpRequests(auth -> auth
-                // Swagger
+
+                // ✅ HelloServlet (tests + servlet access)
+                .requestMatchers("/hello", "/hello/**").permitAll()
+
+                // ✅ Task APIs (Swagger-la POST /tasks 403 poganum na)
+                .requestMatchers("/tasks", "/tasks/**").permitAll()
+
+                // ✅ Swagger UI
                 .requestMatchers(
                         "/swagger-ui/**",
                         "/v3/api-docs/**",
                         "/swagger-ui.html"
                 ).permitAll()
 
-                // Auth APIs
+                // ✅ Authentication APIs
                 .requestMatchers("/auth/**").permitAll()
 
-                // Others secured
+                // ❌ Remaining ellam secured
                 .anyRequest().authenticated()
             );
 
         return http.build();
     }
 
-    // ✅ THIS FIXES YOUR ERROR
+    // ✅ AuthenticationManager bean (Spring Boot 3 ku mandatory)
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+    // ✅ Password encoder
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
