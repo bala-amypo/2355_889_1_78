@@ -1,20 +1,56 @@
+package com.example.demo.security;
+
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.stereotype.Component;
+import org.springframework.security.core.Authentication;
+
+import java.security.Key;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 @Component
 public class JwtTokenProvider {
 
-    private final String secretKey = "your_secret_key_here";
+    private final Key key;
+    private final long validityInMs;
 
-    // Updated method to accept multiple parameters
-    public String generateToken(Authentication authentication, Long userId, String username) {
-        // TODO: implement JWT creation logic using all 3 parameters
-        return "dummy-token-for-" + username + "-" + userId;
+    public JwtTokenProvider(String secret, long validityInMs) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+        this.validityInMs = validityInMs;
     }
 
-    // Keep other methods as is
-    public boolean validateToken(String token) {
-        return true;
+    public String generateToken(Authentication auth, Long userId, String role) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", userId);
+        claims.put("role", role);
+        claims.put("email", auth.getName());
+
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + validityInMs);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(auth.getName())
+                .setIssuedAt(now)
+                .setExpiration(expiry)
+                .signWith(key)
+                .compact();
     }
 
     public String getUsernameFromToken(String token) {
-        return "username-from-token";
+        return getAllClaims(token).getSubject();
     }
-}
+
+    public boolean validateToken(String token) {
+        try {
+            getAllClaims(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public Map<String, Object> getAllClaims(String token) {
+        return Jwts.parserBuilder
