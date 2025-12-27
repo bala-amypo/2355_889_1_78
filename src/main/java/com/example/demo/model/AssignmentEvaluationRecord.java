@@ -17,25 +17,60 @@ public class AssignmentEvaluationRecord {
 
     private String feedback;
 
-    private LocalDateTime evaluatedAt;
+    // ✅ default value so mocked save() still works
+    private LocalDateTime evaluatedAt = LocalDateTime.now();
 
     @PrePersist
-    public void prePersist() {
+    public void onCreate() {
+        if (this.evaluatedAt == null) {
+            this.evaluatedAt = LocalDateTime.now();
+        }
+    }
+
+    @PreUpdate
+    public void onUpdate() {
         this.evaluatedAt = LocalDateTime.now();
     }
 
-    // Getters & Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    // ---------------- GETTERS & SETTERS ----------------
 
-    public Long getAssignmentId() { return assignmentId; }
-    public void setAssignmentId(Long assignmentId) { this.assignmentId = assignmentId; }
+    public Long getId() {
+        return id;
+    }
 
-    public Integer getRating() { return rating; }
-    public void setRating(Integer rating) { this.rating = rating; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getFeedback() { return feedback; }
-    public void setFeedback(String feedback) { this.feedback = feedback; }
+    public Long getAssignmentId() {
+        return assignmentId;
+    }
 
-    public LocalDateTime getEvaluatedAt() { return evaluatedAt; }
+    public void setAssignmentId(Long assignmentId) {
+        this.assignmentId = assignmentId;
+    }
+
+    public Integer getRating() {
+        return rating;
+    }
+
+    public void setRating(Integer rating) {
+        this.rating = rating;
+    }
+
+    public String getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
+    }
+
+    public LocalDateTime getEvaluatedAt() {
+        return evaluatedAt;
+    }
+
+    public void setEvaluatedAt(LocalDateTime evaluatedAt) {
+        this.evaluatedAt = evaluatedAt;
+    }
 }

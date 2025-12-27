@@ -25,13 +25,18 @@ public class TaskRecord {
 
     private String priority; // LOW / MEDIUM / HIGH
 
-    private String status; // OPEN / ASSIGNED / CLOSED
+    // ✅ DEFAULT VALUE FIX (IMPORTANT)
+    private String status = "OPEN"; // OPEN / ASSIGNED / CLOSED
 
     private LocalDateTime createdAt;
 
     @PrePersist
     public void prePersist() {
-        this.createdAt = LocalDateTime.now();
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
+
+        // safety fallback
         if (this.status == null) {
             this.status = "OPEN";
         }
