@@ -2,6 +2,7 @@ package com.example.demo.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,7 +13,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-
 import java.util.List;
 
 @Configuration
@@ -22,82 +22,72 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-            // 🔥 ADD THIS
+            // ✅ CORS ENABLE
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-            // ❌ CSRF disabled (already correct)
+            // ✅ CSRF DISABLED (Swagger + POST)
             .csrf(csrf -> csrf.disable())
 
             .authorizeHttpRequests(auth -> auth
 
-                // 🔥 ADD THIS (VERY IMPORTANT)
-                .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+                // ✅ VERY IMPORTANT (Swagger preflight)
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                // ✅ OLD CODE – DO NOT CHANGE
+                // ✅ PUBLIC ENDPOINTS
                 .requestMatchers("/hello", "/hello/**").permitAll()
-
-                // ✅ OLD CODE – Task APIs
                 .requestMatchers("/tasks", "/tasks/**").permitAll()
 
-                // ✅ OLD CODE – Swagger
+                // ✅ SWAGGER
                 .requestMatchers(
                         "/swagger-ui/**",
                         "/v3/api-docs/**",
                         "/swagger-ui.html"
                 ).permitAll()
 
-                // ✅ OLD CODE – Auth
+                // ✅ AUTH
                 .requestMatchers("/auth/**").permitAll()
 
-                // 🔥 EXTRA CODE – ONLY ADDITION
+                // ✅ EXTRA PUBLIC APIs
                 .requestMatchers("/volunteers", "/volunteers/**").permitAll()
                 .requestMatchers("/skills", "/skills/**").permitAll()
                 .requestMatchers("/assignments", "/assignments/**").permitAll()
                 .requestMatchers("/evaluations", "/evaluations/**").permitAll()
 
-                // 🔒 Remaining secured
+                // 🔒 ALL OTHERS NEED AUTH
                 .anyRequest().authenticated()
             );
 
         return http.build();
     }
 
-    @Bean
-public CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration config = new CorsConfiguration();
-    config.addAllowedOriginPattern("*");
-    config.addAllowedMethod("*");
-    config.addAllowedHeader("*");
-    config.setAllowCredentials(true);
-
-    UrlBasedCorsConfigurationSource source =
-            new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", config);
-    return source;
-}
-
-
-    // 🔥 ADD THIS CORS BEAN
+    // ✅ FIXED CORS CONFIG (403 SOLUTION)
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("*"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        // ❗ DO NOT USE setAllowedOrigins("*")
+        config.addAllowedOriginPattern("*");
+        config.setAllowedMethods(
+                List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")
+        );
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
     }
 
-    // ✅ OLD CODE – AuthenticationManager
+    // ✅ AUTH MANAGER
     @Bean
     public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration authenticationConfiguration) throws Exception {
+            AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    // ✅ OLD CODE – Password Encoder
+    // ✅ PASSWORD ENCODER
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
