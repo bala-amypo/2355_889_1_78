@@ -55,6 +55,28 @@ public class SecurityConfig {
 
                 // 🔒 ALL OTHERS NEED AUTH
                 .anyRequest().authenticated()
+                .authorizeHttpRequests(auth -> auth
+
+    // existing code (unchanged)
+    .requestMatchers("/hello", "/hello/**").permitAll()
+    .requestMatchers("/tasks", "/tasks/**").permitAll()
+    .requestMatchers(
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-ui.html"
+    ).permitAll()
+    .requestMatchers("/auth/**").permitAll()
+    .requestMatchers("/volunteers", "/volunteers/**").permitAll()
+    .requestMatchers("/skills", "/skills/**").permitAll()
+    .requestMatchers("/assignments", "/assignments/**").permitAll()
+    .requestMatchers("/evaluations", "/evaluations/**").permitAll()
+
+    // 🔥 ADD ONLY THIS
+    .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+
+    .anyRequest().authenticated()
+);
+
             );
 
         return http.build();

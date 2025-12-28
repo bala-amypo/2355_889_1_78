@@ -69,6 +69,16 @@ public class AuthController {
         this.jwtTokenProvider = jwtTokenProvider;
         this.userRepository = userRepository;
     }
+@CrossOrigin(
+    origins = "*",
+    allowedHeaders = "*",
+    methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS}
+)
+@RestController
+@RequestMapping("/auth")
+public class AuthController {
+    // your existing code
+}
 
     // ================= LOGIN (UNCHANGED) =================
     @PostMapping("/login")
